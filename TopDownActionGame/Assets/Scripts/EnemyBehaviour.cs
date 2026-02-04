@@ -23,7 +23,6 @@ public class EnemyBehaviour : MonoBehaviour
     private void Update()
     {
         Vector2 direction = (player.position - transform.position);
-
         float distance = Vector2.Distance(transform.position, player.position);
 
         if (distance > detectionRange)
@@ -35,6 +34,10 @@ public class EnemyBehaviour : MonoBehaviour
         if (distance < stopRange)
         {
             movement.Stop();
+
+            if (direction.sqrMagnitude > 0.01f)
+                facing.FaceDirection(direction);
+
             return;
         }
 
