@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerInputActions playerInputActions;
 
+    private Vector2 inputVector;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -21,12 +23,13 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         rb.linearVelocity = new Vector2(inputVector.x, inputVector.y) * moveSpeed;
     }
 
     private void Update()
     {
+        inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
+
         Vector2 mouseScreen = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(mouseScreen);
         mouseWorld.z = 0f;

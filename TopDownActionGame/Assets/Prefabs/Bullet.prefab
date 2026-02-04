@@ -151,7 +151,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!58 &4864697585632052573
 CircleCollider2D:
@@ -202,5 +202,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   moveSpeed: 20
-  timeToLive: 1
+  timeToLive: 4
   impactEffect: {fileID: 5999593711267985948, guid: 14a47e52120ed084c83f1f8c99a8fc18, type: 3}
