@@ -1151,6 +1151,7 @@ GameObject:
   - component: {fileID: 1300576884}
   - component: {fileID: 1300576887}
   - component: {fileID: 1300576888}
+  - component: {fileID: 1300576889}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1194,7 +1195,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
@@ -1227,8 +1228,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07d0f46fc389943439c6adf5671e0daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBehaviour
-  detectionRange: 0
-  stopRange: 0
+  detectionRange: 8
+  stopRange: 3
 --- !u!114 &1300576888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1242,6 +1243,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFacing
   rotate: 1
+  rotationSpeed: 5
+--- !u!58 &1300576889
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300576883}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
 --- !u!1 &1350970843
 GameObject:
   m_ObjectHideFlags: 0
