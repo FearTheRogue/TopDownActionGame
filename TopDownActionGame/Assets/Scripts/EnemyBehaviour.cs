@@ -5,6 +5,7 @@ public class EnemyBehaviour : MonoBehaviour
     private Transform player;
     private EnemyMovement movement;
     private EnemyFacing facing;
+    private EnemyWander wander;
 
     [SerializeField] private float detectionRange;
     [SerializeField] private float stopRange;
@@ -13,6 +14,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         movement = GetComponent<EnemyMovement>();
         facing = GetComponent<EnemyFacing>();
+        wander = GetComponent<EnemyWander>();
     }
 
     private void Start()
@@ -27,7 +29,7 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (distance > detectionRange)
         {
-            movement.Stop();
+            wander.Wander();
             return;
         }
 
