@@ -9,19 +9,11 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput playerInput;
     private PlayerInputActions playerInputActions;
-    private PlayerShooting playerShooting;
-
-    public Transform firePoint;
-    public GameObject bullet;
-    public float timeBetweenShots;
-    public float shotCounter;
-    private bool isShooting;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
-        playerShooting = GetComponent<PlayerShooting>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
