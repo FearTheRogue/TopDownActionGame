@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03203c0b204b1349bf18ceae748775e, type: 3}
+  m_Name: BurstWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponTyle
+  weaponName: Burst
+  weaponType: 2
+  fireRate: 0.075
+  burstCount: 3
+  bulletPrefab: {fileID: 6772366011396059904, guid: 1d0b3ebffa833a3478215721ab81173a, type: 3}

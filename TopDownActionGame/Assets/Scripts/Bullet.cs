@@ -3,8 +3,9 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
-    private Rigidbody2D rb;
+    [SerializeField] private float timeToLive;
 
+    private Rigidbody2D rb;
     public GameObject impactEffect;
 
     private void Awake()
@@ -15,6 +16,8 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         rb.linearVelocity = transform.right * moveSpeed;
+
+        Destroy(gameObject, timeToLive);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInput playerInput;
     private PlayerInputActions playerInputActions;
+    private PlayerShooting playerShooting;
 
     public Transform firePoint;
     public GameObject bullet;
@@ -20,22 +21,26 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
+        playerShooting = GetComponent<PlayerShooting>();
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
-        playerInputActions.Player.Shoot.performed += Shoot_performed;
-        playerInputActions.Player.Shoot.canceled += Shoot_canceled;
+        //playerInputActions.Player.Shoot.performed += Shoot_performed;
+        //playerInputActions.Player.Shoot.canceled += Shoot_canceled;
+
+        //playerInputActions.Player.Shoot.performed += playerShooting.OnShootPerformed;
+        //playerInputActions.Player.Shoot.canceled += playerShooting.OnShootCanceled;
     }
 
-    private void Shoot_performed(InputAction.CallbackContext obj)
-    {
-        isShooting = true;
-    }
+    //private void Shoot_performed(InputAction.CallbackContext obj)
+    //{
+    //    isShooting = true;
+    //}
 
-    private void Shoot_canceled(InputAction.CallbackContext obj)
-    {
-        isShooting = false;
-    }
+    //private void Shoot_canceled(InputAction.CallbackContext obj)
+    //{
+    //    isShooting = false;
+    //}
 
     private void FixedUpdate()
     {
@@ -54,15 +59,15 @@ public class PlayerController : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        if (!isShooting) return;
+        //if (!isShooting) return;
 
-        shotCounter -= Time.deltaTime;
+        //shotCounter -= Time.deltaTime;
 
-        if (shotCounter <= 0)
-        {
-            FireBullet();
-            shotCounter = timeBetweenShots;
-        }
+        //if (shotCounter <= 0)
+        //{
+        //    FireBullet();
+        //    shotCounter = timeBetweenShots;
+        //}
     }
 
     private void FireBullet()
