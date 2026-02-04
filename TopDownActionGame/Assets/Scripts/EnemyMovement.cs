@@ -18,6 +18,11 @@ public class EnemyMovement : MonoBehaviour
         moveDirection = direction.normalized;
     }
 
+    public void SetSpeed(float speed)
+    {
+        moveSpeed = speed;
+    }
+
     private void FixedUpdate()
     {
         rb.linearVelocity = moveDirection * moveSpeed;

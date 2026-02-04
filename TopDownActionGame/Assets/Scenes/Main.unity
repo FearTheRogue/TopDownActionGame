@@ -1172,7 +1172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5598f64a22bc03348b86d696f3e25cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  moveSpeed: 2
+  moveSpeed: 4
 --- !u!50 &1300576885
 Rigidbody2D:
   serializedVersion: 5
@@ -1231,6 +1231,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBehaviour
   detectionRange: 8
   stopRange: 3
+  wanderSpeed: 1
+  chaseSpeed: 3
 --- !u!114 &1300576888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1294,7 +1296,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWander
   wanderRadius: 8
-  wanderSpeed: 2
   wanderDelay: 10
 --- !u!1 &1350970843
 GameObject:

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Detection Settings")]
     [SerializeField] private float detectionRange;
     [SerializeField] private float stopRange;
+
+    [Header("Speed Settings")]
+    [SerializeField] private float wanderSpeed;
+    [SerializeField] private float chaseSpeed;
 
     private void Awake()
     {
@@ -30,6 +35,7 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (distance > detectionRange)
         {
+            movement.SetSpeed(wanderSpeed);
             wander.Wander();
             return;
         }

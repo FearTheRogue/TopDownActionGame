@@ -8,7 +8,6 @@ public class EnemyWander : MonoBehaviour
 {
     [Header("Wander Settings")]
     [SerializeField] private float wanderRadius;
-    [SerializeField] private float wanderSpeed;
     [SerializeField] private float wanderDelay;
 
     private EnemyMovement movement;
@@ -36,15 +35,13 @@ public class EnemyWander : MonoBehaviour
     {
         if (waiting) return;
 
-        timer -= Time.deltaTime;
-
         // Move toward wander target
         Vector2 direction = wanderTarget - (Vector2)transform.position;
         movement.SetMoveDirection(direction);
         facing.FaceDirection(direction);
 
-        // If close enough to target or timer expired, pick a new target
-        if (direction.magnitude < 0.2f || timer <= 0f)
+        // If close enough to target, pick a new target
+        if (direction.magnitude < 0.2f)
         {
             StartCoroutine(WanderWait());
         }
@@ -54,6 +51,7 @@ public class EnemyWander : MonoBehaviour
     {
         waiting = true;
         movement.Stop();
+
         float waitTime = UnityEngine.Random.Range(1f, 3f);
         yield return new WaitForSeconds(waitTime);
 
@@ -65,7 +63,6 @@ public class EnemyWander : MonoBehaviour
     {
         // Pick a random point within a circle radius from the start position
         wanderTarget = startPos + UnityEngine.Random.insideUnitCircle * wanderRadius;
-        timer = wanderDelay;
     }
 
     private void OnDrawGizmos()

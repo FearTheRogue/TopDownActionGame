@@ -38,10 +38,6 @@ public class PlayerShooting : MonoBehaviour
 
         playerInputActions.Player.ScrollWheel.performed += OnScrollWheel;
 
-        playerInputActions.Player.Switch1.performed += context => EquipWeapon(0);
-        playerInputActions.Player.Switch2.performed += context => EquipWeapon(1);
-        playerInputActions.Player.Switch3.performed += context => EquipWeapon(2);
-
         playerInputActions.Enable();
     }
 
@@ -54,10 +50,6 @@ public class PlayerShooting : MonoBehaviour
     {
         playerInputActions.Player.Shoot.performed -= OnShootPerformed;
         playerInputActions.Player.Shoot.canceled -= OnShootCanceled;
-
-        playerInputActions.Player.Switch1.performed -= context => EquipWeapon(0);
-        playerInputActions.Player.Switch2.performed -= context => EquipWeapon(1);
-        playerInputActions.Player.Switch3.performed -= context => EquipWeapon(2);
 
         playerInputActions.Disable();
 
