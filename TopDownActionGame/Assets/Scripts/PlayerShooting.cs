@@ -26,6 +26,9 @@ public class PlayerShooting : MonoBehaviour
 
     private PlayerInputActions playerInputActions;
 
+    private float scrollCooldown = 0.2f;
+    private float lastScrollTime;
+
     private void Awake()
     {
         playerInputActions = new PlayerInputActions();
@@ -78,16 +81,18 @@ public class PlayerShooting : MonoBehaviour
 
     private void OnScrollWheel(InputAction.CallbackContext context)
     {
+        // Adds scroll dampening
+        if (Time.time < lastScrollTime + scrollCooldown) return;
+
+        lastScrollTime = Time.time;
+
+        // Change weapon
         Vector2 scroll = context.ReadValue<Vector2>();
 
         if (scroll.y > 0)
-        {
             CycleWeapon(+1);
-        }
         else if (scroll.y < 0)
-        {
             CycleWeapon(-1);
-        }
     }
 
     public void OnShootPerformed(InputAction.CallbackContext context)

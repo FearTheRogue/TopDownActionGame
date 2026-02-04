@@ -7,6 +7,7 @@ public class EnemyBehaviour : MonoBehaviour
     private EnemyFacing facing;
     private EnemyWander wander;
 
+    [Header("Detection Settings")]
     [SerializeField] private float detectionRange;
     [SerializeField] private float stopRange;
 
