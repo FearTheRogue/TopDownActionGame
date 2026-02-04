@@ -10,6 +10,12 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerInputActions playerInputActions;
 
+    public Transform firePoint;
+    public GameObject bullet;
+    public float timeBetweenShots;
+    public float shotCounter;
+    private bool isShooting;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -17,6 +23,18 @@ public class PlayerController : MonoBehaviour
 
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
+        playerInputActions.Player.Shoot.performed += Shoot_performed;
+        playerInputActions.Player.Shoot.canceled += Shoot_canceled;
+    }
+
+    private void Shoot_performed(InputAction.CallbackContext obj)
+    {
+        isShooting = true;
+    }
+
+    private void Shoot_canceled(InputAction.CallbackContext obj)
+    {
+        isShooting = false;
     }
 
     private void FixedUpdate()
@@ -35,5 +53,20 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+        if (!isShooting) return;
+
+        shotCounter -= Time.deltaTime;
+
+        if (shotCounter <= 0)
+        {
+            FireBullet();
+            shotCounter = timeBetweenShots;
+        }
+    }
+
+    private void FireBullet()
+    {
+        Instantiate(bullet, firePoint.position, firePoint.rotation);
     }
 }
