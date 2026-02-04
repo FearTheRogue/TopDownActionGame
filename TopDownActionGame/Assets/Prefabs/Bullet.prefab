@@ -201,6 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e819908308b747240979b3e365354464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  moveSpeed: 12
+  moveSpeed: 20
   timeToLive: 1
   impactEffect: {fileID: 5999593711267985948, guid: 14a47e52120ed084c83f1f8c99a8fc18, type: 3}
