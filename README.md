@@ -8,7 +8,7 @@ This repository is intended to showcase my development skills as a junior softwa
 ---
 
 ### 🧩 Planned Features
-- Player movement and shooting ✅ (planned)
+- Player movement and shooting ✅
 - Enemy AI with chase and attack behaviours ✅ (planned)
 - Wave-based enemy spawning ✅ (planned)
 - Health system, score tracking, and game over screen ✅ (planned)
