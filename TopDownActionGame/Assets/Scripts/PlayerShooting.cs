@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.Rendering;
 using Unity.VisualScripting;
+using System.Transactions;
+using System;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -10,11 +12,13 @@ public class PlayerShooting : MonoBehaviour
     public Transform firePoint;
 
     [Header("Weapons")]
+    public WeaponData[] weapons;
     public WeaponData pistolWeapon;
     public WeaponData automaticWeapon;
     public WeaponData burstWeapon;
 
     private WeaponData currentWeapon;
+    private int currentWeaponIndex = 0;
 
     private bool isShooting;
     private float shotTimer;
@@ -29,11 +33,18 @@ public class PlayerShooting : MonoBehaviour
         playerInputActions.Player.Shoot.performed += OnShootPerformed;
         playerInputActions.Player.Shoot.canceled += OnShootCanceled;
 
-        playerInputActions.Player.Switch1.performed += context => EquipWeapon(pistolWeapon);
-        playerInputActions.Player.Switch2.performed += context => EquipWeapon(automaticWeapon);
-        playerInputActions.Player.Switch3.performed += context => EquipWeapon(burstWeapon);
+        playerInputActions.Player.ScrollWheel.performed += OnScrollWheel;
+
+        playerInputActions.Player.Switch1.performed += context => EquipWeapon(0);
+        playerInputActions.Player.Switch2.performed += context => EquipWeapon(1);
+        playerInputActions.Player.Switch3.performed += context => EquipWeapon(2);
 
         playerInputActions.Enable();
+    }
+
+    private void Start()
+    {
+        EquipWeapon(0);
     }
 
     private void OnDestroy()
@@ -41,9 +52,9 @@ public class PlayerShooting : MonoBehaviour
         playerInputActions.Player.Shoot.performed -= OnShootPerformed;
         playerInputActions.Player.Shoot.canceled -= OnShootCanceled;
 
-        playerInputActions.Player.Switch1.performed -= context => EquipWeapon(pistolWeapon);
-        playerInputActions.Player.Switch2.performed -= context => EquipWeapon(automaticWeapon);
-        playerInputActions.Player.Switch3.performed -= context => EquipWeapon(burstWeapon);
+        playerInputActions.Player.Switch1.performed -= context => EquipWeapon(0);
+        playerInputActions.Player.Switch2.performed -= context => EquipWeapon(1);
+        playerInputActions.Player.Switch3.performed -= context => EquipWeapon(2);
 
         playerInputActions.Disable();
 
@@ -62,6 +73,20 @@ public class PlayerShooting : MonoBehaviour
                 FireBullet();
                 shotTimer = currentWeapon.fireRate;
             }
+        }
+    }
+
+    private void OnScrollWheel(InputAction.CallbackContext context)
+    {
+        Vector2 scroll = context.ReadValue<Vector2>();
+
+        if (scroll.y > 0)
+        {
+            CycleWeapon(+1);
+        }
+        else if (scroll.y < 0)
+        {
+            CycleWeapon(-1);
         }
     }
 
@@ -113,13 +138,29 @@ public class PlayerShooting : MonoBehaviour
         isBursting = false;
     }
 
-    public void EquipWeapon (WeaponData newWeapon)
+    public void EquipWeapon (int index)
     {
-        currentWeapon = newWeapon;
+        if (index < 0 || index >= weapons.Length) return;
+
+        currentWeaponIndex = index;
+        currentWeapon = weapons[index];
+
         shotTimer = 0f;
         isShooting = false;
         isBursting = false;
 
-        Debug.Log($"Equipped weapon {newWeapon.weaponName}");
+        Debug.Log($"Equipped weapon {currentWeapon.weaponName}");
+    }
+
+    private void CycleWeapon(int direction)
+    {
+        currentWeaponIndex += direction;
+
+        if (currentWeaponIndex >= weapons.Length)
+            currentWeaponIndex = 0;
+        if (currentWeaponIndex < 0)
+            currentWeaponIndex = weapons.Length - 1;
+
+        EquipWeapon(currentWeaponIndex);
     }
 }
