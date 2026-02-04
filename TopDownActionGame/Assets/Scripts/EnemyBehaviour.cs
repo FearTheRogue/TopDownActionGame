@@ -6,6 +6,9 @@ public class EnemyBehaviour : MonoBehaviour
     private EnemyMovement movement;
     private EnemyFacing facing;
 
+    [SerializeField] private float detectionRange;
+    [SerializeField] private float stopRange;
+
     private void Awake()
     {
         movement = GetComponent<EnemyMovement>();
@@ -20,8 +23,31 @@ public class EnemyBehaviour : MonoBehaviour
     private void Update()
     {
         Vector2 direction = (player.position - transform.position);
-        movement.SetMoveDirection(direction);
 
+        float distance = Vector2.Distance(transform.position, player.position);
+
+        if (distance > detectionRange)
+        {
+            movement.Stop();
+            return;
+        }
+
+        if (distance < stopRange)
+        {
+            movement.Stop();
+            return;
+        }
+
+        movement.SetMoveDirection(direction);
         facing.FaceDirection(direction);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, stopRange);
     }
 }

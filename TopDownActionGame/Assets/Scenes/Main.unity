@@ -1186,7 +1186,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -1196,7 +1196,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!4 &1300576886
 Transform:
@@ -1227,6 +1227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07d0f46fc389943439c6adf5671e0daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBehaviour
+  detectionRange: 0
+  stopRange: 0
 --- !u!114 &1300576888
 MonoBehaviour:
   m_ObjectHideFlags: 0

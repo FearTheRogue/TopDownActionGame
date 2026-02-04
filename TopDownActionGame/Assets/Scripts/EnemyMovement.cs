@@ -26,5 +26,6 @@ public class EnemyMovement : MonoBehaviour
     public void Stop()
     {
         rb.linearVelocity = Vector2.zero;
+        moveDirection = Vector2.zero;
     }
 }
