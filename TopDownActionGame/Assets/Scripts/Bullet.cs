@@ -27,9 +27,9 @@ public class Bullet : MonoBehaviour
         rb.linearVelocity = transform.right * moveSpeed;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+        EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
 
         if (enemyHealth != null)
             enemyHealth.TakeDamage(damage);
