@@ -1152,6 +1152,7 @@ GameObject:
   - component: {fileID: 1300576887}
   - component: {fileID: 1300576888}
   - component: {fileID: 1300576890}
+  - component: {fileID: 1300576891}
   - component: {fileID: 1300576889}
   m_Layer: 0
   m_Name: Enemy
@@ -1297,6 +1298,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWander
   wanderRadius: 8
   wanderDelay: 10
+--- !u!114 &1300576891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300576883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a31963080ea5e1b488759c4599bd49ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHealth: 100
 --- !u!1 &1350970843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,7 +1424,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37f9c2198a7cd545b4d5a32d9804607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  rb: {fileID: 0}
   moveSpeed: 8
 --- !u!114 &1350970848
 MonoBehaviour:

@@ -50,6 +50,7 @@ public class EnemyBehaviour : MonoBehaviour
             return;
         }
 
+        movement.SetSpeed(chaseSpeed);
         movement.SetMoveDirection(direction);
         facing.FaceDirection(direction);
     }
