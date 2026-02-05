@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -5,6 +6,9 @@ public class EnemyHealth : MonoBehaviour
     [Header("Health Settings")]
     [SerializeField] private int maxHealth = 100;
     private int currentHealth;
+
+    public event Action OnDamage;
+    public event Action OnDeath;
 
     private void Awake()
     {
@@ -19,7 +23,7 @@ public class EnemyHealth : MonoBehaviour
         if (amount < 0) return;
 
         currentHealth -= amount;
-        //OnDamage?.Invoke();
+        OnDamage?.Invoke();
 
         if (currentHealth <= 0)
         {
@@ -40,10 +44,14 @@ public class EnemyHealth : MonoBehaviour
 
     public void Die()
     {
-        //OnDeath?.Invoke();
+        OnDeath?.Invoke();
 
         Destroy(gameObject);
     }
 
+    public float GetHealthPercent()
+    {
+        return (float)currentHealth / maxHealth;
+    }
 
 }
