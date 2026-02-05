@@ -1,10 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using UnityEngine.Rendering;
-using Unity.VisualScripting;
-using System.Transactions;
-using System;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -100,7 +96,8 @@ public class PlayerShooting : MonoBehaviour
                 isShooting = true;
                 break;
             case WeaponType.Burst:
-                StartCoroutine(BurstFire());
+                if (!isBursting)
+                    StartCoroutine(BurstFire());
                 break;
         }
     }
@@ -117,7 +114,14 @@ public class PlayerShooting : MonoBehaviour
     {
         if (currentWeapon == null || currentWeapon.bulletPrefab == null) return;
 
-        Instantiate(currentWeapon.bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bulletObj = Instantiate(currentWeapon.bulletPrefab, firePoint.position, firePoint.rotation);
+
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+
+        if (bullet != null)
+        {
+            bullet.SetDamage(currentWeapon.bulletDamage);
+        }
     }
 
     private IEnumerator BurstFire()
