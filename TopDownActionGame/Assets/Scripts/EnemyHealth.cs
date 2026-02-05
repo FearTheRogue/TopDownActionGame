@@ -20,7 +20,7 @@ public class EnemyHealth : MonoBehaviour
     /// </summary>
     public void TakeDamage(int amount)
     {
-        if (amount < 0) return;
+        if (amount <= 0) return;
 
         currentHealth -= amount;
         OnDamage?.Invoke();
@@ -53,5 +53,4 @@ public class EnemyHealth : MonoBehaviour
     {
         return (float)currentHealth / maxHealth;
     }
-
 }
