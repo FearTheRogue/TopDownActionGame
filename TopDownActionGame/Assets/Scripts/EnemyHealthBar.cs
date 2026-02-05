@@ -9,9 +9,6 @@ public class EnemyHealthBar : MonoBehaviour
     [SerializeField] private EnemyHealth health;
     [SerializeField] private Image fillImage;
 
-    [Header("Offset Above Enemy")]
-    [SerializeField] private Vector3 offset = new Vector3(0, 1f, 0);
-
     private void Start()
     {
         if (health == null)
@@ -27,6 +24,11 @@ public class EnemyHealthBar : MonoBehaviour
     private void UpdateBar()
     {
         fillImage.fillAmount = health.GetHealthPercent();
+    }
+
+    private void LateUpdate()
+    {
+        transform.localRotation = Quaternion.identity;
     }
 
     private void HideBar()
