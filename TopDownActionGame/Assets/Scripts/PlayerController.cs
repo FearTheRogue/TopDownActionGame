@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private Transform visuals;
+    [SerializeField] private Transform armPivot;
 
     [Header("Aim Smoothing")]
     [SerializeField] private float aimSmoothing;
@@ -71,7 +72,8 @@ public class PlayerController : MonoBehaviour
         else
             currentAngle = targetAngle;
 
-        visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);    
+        visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+        armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
     }
 
     private void OnDisable()
