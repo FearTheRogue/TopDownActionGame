@@ -7,17 +7,37 @@ public class EnemyFacing : MonoBehaviour
     [SerializeField] private float rotationSpeed;
 
     [SerializeField] private Transform visuals;
+    [SerializeField] private Transform armPivot;
+
+    private Quaternion currentRotation;
+
+    private void Awake()
+    {
+        if (visuals == null)
+            visuals = transform;
+
+        if (armPivot == null)
+            armPivot = visuals;
+
+        currentRotation = visuals.rotation;
+    }
 
     public void FaceDirection(Vector2 direction)
     {
-        if (!rotate || direction.sqrMagnitude < 0.001f) return;
+        if (!rotate) return;
 
-        if (visuals == null) visuals = transform;
+        if (direction.sqrMagnitude < 0.001f) return;
 
         float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion target = Quaternion.Euler(0, 0, targetAngle);
 
-        visuals.rotation = Quaternion.Lerp(visuals.rotation, target, Time.deltaTime * rotationSpeed);
+        currentRotation = Quaternion.Lerp(visuals.rotation, target, Time.deltaTime * rotationSpeed);
+
+        if (visuals != null)
+            visuals.rotation = currentRotation;
+
+        if (armPivot != null)
+            armPivot.rotation = currentRotation;
     }
 
     public void FaceTarget(Vector2 targetPosition)
