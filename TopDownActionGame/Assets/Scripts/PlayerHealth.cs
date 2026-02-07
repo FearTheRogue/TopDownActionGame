@@ -1,16 +1,42 @@
+using System.Diagnostics.Contracts;
+using System.Transactions;
 using UnityEngine;
+using UnityEngine.Animations;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private int maxHealth;
+    private int currentHealth;
+
+    private void Awake()
     {
-        
+        currentHealth = maxHealth;   
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage(int amount)
     {
-        
+        if (amount <= 0)
+            return;
+
+        currentHealth -= amount;
+        currentHealth = Mathf.Max(0, currentHealth);
+
+        Debug.Log($"Player HP: {currentHealth}/{maxHealth}");
+
+        if (currentHealth == 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Player Died");
+
+        var controller = GetComponent<PlayerController>();
+        if (controller != null)
+        {
+            controller.enabled = false;
+        }
     }
 }

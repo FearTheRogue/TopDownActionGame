@@ -1513,7 +1513,9 @@ GameObject:
   - component: {fileID: 1350970846}
   - component: {fileID: 1350970845}
   - component: {fileID: 1350970847}
+  - component: {fileID: 1350970849}
   - component: {fileID: 1350970848}
+  - component: {fileID: 1350970850}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1637,6 +1639,31 @@ MonoBehaviour:
   pistolWeapon: {fileID: 11400000, guid: 84e8f269f8a566e439072afff01b8c88, type: 2}
   automaticWeapon: {fileID: 11400000, guid: b6717fe274d2da94991090f3974b762f, type: 2}
   burstWeapon: {fileID: 11400000, guid: 0cce8d1e7c2ff0f4da630408bfdbd08b, type: 2}
+--- !u!114 &1350970849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350970843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeeb0bc0335e70f4caab8700010d1e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+--- !u!114 &1350970850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350970843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f7d18ce480a59418e5917e794fd766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageTest
 --- !u!1 &1443755524
 GameObject:
   m_ObjectHideFlags: 0
