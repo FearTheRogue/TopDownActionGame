@@ -24,9 +24,7 @@ public class EnemyFacing : MonoBehaviour
 
     public void FaceDirection(Vector2 direction)
     {
-        if (!rotate) return;
-
-        if (direction.sqrMagnitude < 0.001f) return;
+        if (!rotate || direction.sqrMagnitude < 0.001f) return;
 
         float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion target = Quaternion.Euler(0, 0, targetAngle);
