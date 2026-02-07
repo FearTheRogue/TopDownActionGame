@@ -1,43 +1,123 @@
-# Top-Down Action Game
+# Cursed Forest — 2.5D Atmospheric Action Prototype
 
-A small Unity project demonstrating a top-down shooter structure.  
-This repository is intended to showcase my development skills as a junior software and game developer.  
+An in-development Unity project exploring **atmospheric 2.5D action survival gameplay** set within a mysterious, post-collapse medieval forest.
 
-> ⚠️ Note: This project is in its initial setup stage — most gameplay features are not implemented yet.  
+This repository showcases my growth as a **junior software and game developer**, focusing on:
 
----
+- clean, modular C# architecture  
+- readable and scalable gameplay systems  
+- intentional game design rather than isolated prototypes  
 
-### 🧩 Planned Features
-- Player movement and shooting ✅
-- Enemy AI with chase and attack behaviours ✅ (planned)
-- Wave-based enemy spawning ✅ (planned)
-- Health system, score tracking, and game over screen ✅ (planned)
-- ScriptableObjects for easy enemy tweaking ✅ (planned)
-- Object pooling for enemies ✅ (planned)
+> ⚠️ **Work in progress:**  
+> The project is currently focused on building a **playable vertical slice** rather than full game content.
 
 ---
 
-### 🛠 Tech Stack
-- Unity 6.3 LTS  
-- C# scripts  
-- 2D sprites  
+## 🎮 Current Gameplay Features
+
+### Player
+- Smooth 2D movement with mouse-aimed rotation  
+- Modular shooting system with support for multiple weapon types  
+- Health and damage pipeline using an `IDamageable` interface  
+
+### Enemies
+- Reusable **modular enemy architecture**:
+  - Movement  
+  - Facing  
+  - Behaviour/state logic  
+  - Health  
+  - Melee attack component  
+
+- Implemented enemy types:
+  - **Hollow Wanderer** – slow melee enemy teaching combat rhythm  
+  - **Thicket Stalker** – hidden ambush enemy creating exploration tension  
+
+### Combat Loop
+- Functional **damage, death, and spacing mechanics**  
+- Designed around **moderate survival tension** rather than arcade chaos  
+- Built to support an **atmospheric exploration → encounter → silence rhythm**
 
 ---
 
-### 📝 How to Play
-> Not playable yet — features will be added in upcoming commits.
+## 🌲 Design Direction
+
+The long-term vision is a **short, atmospheric 2.5D action survival experience** where a lone wanderer explores cursed forest ruins and uncovers relic weapons from a lost civilisation.
+
+### Key pillars
+- **Isolation** – quiet environmental storytelling  
+- **Unease** – tension even when no enemies are present  
+- **Fragile survival** – mistakes matter, but gameplay remains fair  
+
+Development is currently focused on creating a **3–5 minute vertical slice** to validate:
+
+- combat feel  
+- enemy pacing  
+- ambush tension  
+- environmental mood  
 
 ---
 
-### ⚡ Fun Facts
-- Developed as a small polished project for my GitHub portfolio  
-- Emphasis on clean code and easy-to-maintain systems  
+## 🛠 Tech Stack
+
+- **Unity 6.3 LTS**
+- **C#**
+- **2D sprites in a 2.5D perspective**
+- Modular, component-driven architecture
 
 ---
 
-### 🔧 Next Steps
-1. Implement player movement and shooting  
-2. Implement basic enemy AI  
-3. Implement wave spawning system  
-4. Add health, score, and UI systems  
-5. Polish and document scripts  
+## 🚧 In Progress
+
+- Forest vertical-slice level blockout  
+- Encounter pacing and enemy placement  
+- Relic weapon progression prototype  
+- Basic environmental atmosphere and tension flow  
+
+---
+
+## 🔮 Planned Systems (Future)
+
+- Additional enemy behaviours and variants  
+- Relic abilities and weapon discovery progression  
+- Encounter/spawn direction system  
+- UI, feedback, and polish pass  
+- Short multi-stage playable experience  
+
+---
+
+## 📂 Purpose of This Repository
+
+This project serves as a **portfolio piece demonstrating**:
+
+- practical Unity architecture  
+- iterative gameplay design  
+- ability to move from prototype → playable slice → polished experience  
+
+---
+
+## 🧭 Development Philosophy
+
+Rather than building large unfinished systems, this project follows a **vertical-slice-first approach**:
+
+> Build something **small, playable, and atmospheric**,  
+> then expand safely.
+
+This keeps scope realistic while ensuring steady, visible progress.
+
+---
+
+## 📌 Status
+
+**Active development**  
+Current milestone: **First playable forest slice with functional enemy encounters**
+
+---
+
+## 👤 Author
+
+Developed by a junior software & game developer focused on:
+
+- clean code  
+- maintainable systems  
+- thoughtful gameplay design  
+- finishing real, playable projects
