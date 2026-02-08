@@ -164,4 +164,13 @@ public class PlayerShooting : MonoBehaviour
 
         EquipWeapon(currentWeaponIndex);
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(firePoint.position, 0.05f);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(firePoint.position, firePoint.position + firePoint.right * 0.5f);
+    }
 }

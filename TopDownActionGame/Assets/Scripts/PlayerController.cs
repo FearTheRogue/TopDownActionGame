@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         Vector3 mouseWorld = cam.ScreenToWorldPoint(mouseScreen);
         mouseWorld.z = 0f;
 
-        Vector2 direction = (Vector2)mouseWorld - rb.position;
+        Vector2 direction = (Vector2)mouseWorld - (Vector2)armPivot.position;
 
         if (direction.sqrMagnitude < 0.0001f) return;
 
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         else
             currentAngle = targetAngle;
 
-        visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+        //visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
         armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
     }
 
