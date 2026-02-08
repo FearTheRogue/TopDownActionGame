@@ -21,10 +21,13 @@ public class PlayerController : MonoBehaviour
     private float targetAngle;
     private float currentAngle;
 
+    private SpriteFlipper flipper;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
+        flipper = GetComponent<SpriteFlipper>();
         //playerInput = GetComponent<PlayerInput>();
 
         playerInputActions = new PlayerInputActions();
@@ -73,6 +76,9 @@ public class PlayerController : MonoBehaviour
             currentAngle = targetAngle;
 
         //visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+        if(flipper != null)
+            flipper.FaceDirection(direction);
+
         armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
     }
 
