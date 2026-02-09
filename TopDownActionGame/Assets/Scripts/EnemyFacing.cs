@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http.Headers;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ public class EnemyFacing : MonoBehaviour
     [SerializeField] private Transform visuals;
     [SerializeField] private Transform armPivot;
 
-    private Quaternion currentRotation;
+    private float currentAngle;
+    private SpriteFlipper flipper;
 
     private void Awake()
     {
@@ -19,23 +21,23 @@ public class EnemyFacing : MonoBehaviour
         if (armPivot == null)
             armPivot = visuals;
 
-        currentRotation = visuals.rotation;
+        flipper = GetComponent<SpriteFlipper>();
     }
 
     public void FaceDirection(Vector2 direction)
     {
         if (!rotate || direction.sqrMagnitude < 0.001f) return;
 
-        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Quaternion target = Quaternion.Euler(0, 0, targetAngle);
-
-        currentRotation = Quaternion.Lerp(visuals.rotation, target, Time.deltaTime * rotationSpeed);
-
-        if (visuals != null)
-            visuals.rotation = currentRotation;
+        if (flipper != null)
+            flipper.FaceDirection(direction);
 
         if (armPivot != null)
-            armPivot.rotation = currentRotation;
+        {
+            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * rotationSpeed);
+
+            armPivot.localRotation = Quaternion.Euler(0, 0, currentAngle);
+        }
     }
 
     public void FaceTarget(Vector2 targetPosition)
