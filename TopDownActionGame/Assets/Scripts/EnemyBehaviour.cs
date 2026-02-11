@@ -16,11 +16,15 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] private float wanderSpeed;
     [SerializeField] private float chaseSpeed;
 
+    private EnemyPatrol patrol;
+
     private void Awake()
     {
         movement = GetComponent<EnemyMovement>();
         facing = GetComponent<EnemyFacing>();
         wander = GetComponent<EnemyWander>();
+
+        patrol = GetComponent<EnemyPatrol>();
     }
 
     private void Start()
@@ -35,8 +39,16 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (distance > detectionRange)
         {
-            movement.SetSpeed(wanderSpeed);
-            wander.Wander();
+            if (patrol != null)
+            {
+                patrol.Patrol();
+            }
+            else
+            {
+                movement.SetSpeed(wanderSpeed);
+                wander.Wander();
+            }
+
             return;
         }
 
