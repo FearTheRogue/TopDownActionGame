@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyMovement))]
@@ -16,6 +17,7 @@ public class EnemyPatrol : MonoBehaviour
     private EnemyFacing facing;
 
     private int currentIndex = 0;
+    private int direction = 1;
     private float waitTimer = 0;
     private bool waiting = false;
 
@@ -39,7 +41,21 @@ public class EnemyPatrol : MonoBehaviour
             if (waitTimer <= 0)
             {
                 waiting = false;
-                currentIndex = (currentIndex + 1) % patrolPoints.Length;
+
+                // Move to the next index in current direction
+                currentIndex += direction;
+
+                // Reverse direction
+                if (currentIndex >= patrolPoints.Length)
+                {
+                    currentIndex = patrolPoints.Length - 2;
+                    direction = -1;
+                }
+                else if (currentIndex < 0)
+                {
+                    currentIndex = 1;
+                    direction = 1;
+                }
             }
 
             return;
@@ -47,14 +63,14 @@ public class EnemyPatrol : MonoBehaviour
 
         Transform target = patrolPoints[currentIndex];
 
-        Vector2 direction = target.position - transform.position;
+        Vector2 dir = target.position - transform.position;
 
         movement.SetSpeed(patrolSpeed);
-        movement.SetMoveDirection(direction);
-        facing.FaceDirection(direction);
+        movement.SetMoveDirection(dir);
+        facing.FaceDirection(dir);
 
         // Arrived at point
-        if (direction.magnitude <= arriveDistance)
+        if (dir.magnitude <= arriveDistance)
         {
             waiting = true;
             waitTimer = waitTime;
