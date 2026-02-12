@@ -122,6 +122,8 @@ public class PlayerShooting : MonoBehaviour
         {
             bullet.SetDamage(currentWeapon.bulletDamage);
         }
+
+        FindFirstObjectByType<CombatCameraZoom>().NotifyCombat();
     }
 
     private IEnumerator BurstFire()
