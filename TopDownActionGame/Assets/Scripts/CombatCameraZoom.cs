@@ -1,8 +1,13 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEditor.Build;
+using UnityEngine.Rendering;
 
 public class CombatCameraZoom : MonoBehaviour
 {
+    [Header("Dependencies")]
+    [SerializeField] private CombatState combatState;
+
     [Header("Cinemachine Cameras")]
     [SerializeField] private CinemachineCamera exploreCam;
     [SerializeField] private CinemachineCamera combatCam;
@@ -11,41 +16,61 @@ public class CombatCameraZoom : MonoBehaviour
     [SerializeField] private int explorePriority = 10;
     [SerializeField] private int combatPriority = 20;
 
-    [Header("Combat State")]
-    [SerializeField] private float combatHoldTime = 2.0f;
-
-    private float combatTimer;
-
     private void Awake()
     {
-        SetCombat(false);
+        if (combatState == null)
+            combatState = FindFirstObjectByType<CombatState>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (combatTimer > 0f)
-        {
-            combatTimer -= Time.deltaTime;
+        if (combatState != null)
+            combatState.OnCombatChanged += HandleCombatChanged;
 
-            if (combatTimer <= 0f)
-            {
-                SetCombat(false);
-            }
-        }
+        // Apply initial state
+        HandleCombatChanged(combatState != null && combatState.InCombat);
     }
 
-    public void NotifyCombat()
+    private void OnDisable()
     {
-        combatTimer = combatHoldTime;
-        SetCombat(true);
+        if (combatState != null)
+            combatState.OnCombatChanged -= HandleCombatChanged;
     }
 
-    public void SetCombat(bool inCombat)
+    private void HandleCombatChanged(bool inCombat)
     {
-        if (exploreCam == null || exploreCam == null)
+        if (exploreCam == null || combatCam == null)
             return;
 
         exploreCam.Priority = inCombat ? explorePriority : combatPriority;
         combatCam.Priority = inCombat ? combatPriority : explorePriority;
     }
+
+    //private void Update()
+    //{
+    //    if (combatTimer > 0f)
+    //    {
+    //        combatTimer -= Time.deltaTime;
+
+    //        if (combatTimer <= 0f)
+    //        {
+    //            SetCombat(false);
+    //        }
+    //    }
+    //}
+
+    //public void NotifyCombat()
+    //{
+    //    combatTimer = combatHoldTime;
+    //    SetCombat(true);
+    //}
+
+    //public void SetCombat(bool inCombat)
+    //{
+    //    if (exploreCam == null || exploreCam == null)
+    //        return;
+
+    //    exploreCam.Priority = inCombat ? explorePriority : combatPriority;
+    //    combatCam.Priority = inCombat ? combatPriority : explorePriority;
+    //}
 }

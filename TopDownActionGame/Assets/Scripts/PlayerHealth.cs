@@ -8,15 +8,24 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] private int maxHealth;
     private int currentHealth;
 
+    private CombatState combatState;
+
     private void Awake()
     {
         currentHealth = maxHealth;   
+    }
+
+    private void Start()
+    {
+        combatState = FindFirstObjectByType<CombatState>();
     }
 
     public void TakeDamage(int amount)
     {
         if (amount <= 0)
             return;
+
+        combatState?.NotifyCombat(3f);
 
         currentHealth -= amount;
         currentHealth = Mathf.Max(0, currentHealth);

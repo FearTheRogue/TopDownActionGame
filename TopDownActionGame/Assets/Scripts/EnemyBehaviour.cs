@@ -17,6 +17,7 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] private float chaseSpeed;
 
     private EnemyPatrol patrol;
+    private CombatState combatState;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void Start()
     {
+        combatState = FindFirstObjectByType<CombatState>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
@@ -36,6 +38,11 @@ public class EnemyBehaviour : MonoBehaviour
     {
         Vector2 direction = (player.position - transform.position);
         float distance = Vector2.Distance(transform.position, player.position);
+
+        if (distance <= detectionRange)
+        {
+            combatState?.NotifyCombat();
+        }
 
         if (distance > detectionRange)
         {
