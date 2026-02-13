@@ -15,10 +15,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
    // private Rigidbody2D rb;
 
     private CombatState combatState;
+    private HitFlash hitFlash;
 
     private void Awake()
     {
-        currentHealth = maxHealth;   
+        currentHealth = maxHealth;
+        hitFlash = GetComponent<HitFlash>();
         //rb = GetComponent<Rigidbody2D>();
     }
 
@@ -63,6 +65,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         currentHealth = Mathf.Max(0, currentHealth);
 
         Debug.Log($"Player HP: {currentHealth}/{maxHealth}");
+        hitFlash?.Play();
 
         if (currentHealth == 0)
         {
