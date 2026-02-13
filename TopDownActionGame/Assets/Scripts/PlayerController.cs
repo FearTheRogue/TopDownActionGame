@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
 
     private SpriteFlipper flipper;
 
+    [SerializeField] private float knockbackDecay = 12f;
+    private Vector2 externalVelocity;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -45,7 +48,15 @@ public class PlayerController : MonoBehaviour
         if (move.sqrMagnitude > 1f)
             move.Normalize();
 
-        rb.linearVelocity = move * moveSpeed;
+        // decay external velocity smoothly
+        externalVelocity = Vector2.Lerp(externalVelocity, Vector2.zero, Time.fixedDeltaTime * knockbackDecay);
+
+        rb.linearVelocity = (move * moveSpeed) + externalVelocity;
+    }
+
+    public void AddKnockback(Vector2 impulse)
+    {
+        externalVelocity += impulse;
     }
 
     private void Update()

@@ -64,10 +64,15 @@ public class EnemyMeleeAttack : MonoBehaviour
 
         if (hit != null)
         {
-            IDamageable dmg = hit.GetComponent<IDamageable>();
-
-            if (dmg != null)
-                dmg.TakeDamage(damage);
+            if (hit.TryGetComponent<PlayerHealth>(out var playerHealth))
+            {
+                playerHealth.TakeDamage(damage, transform.position); // knockback away from enemy
+            }
+            else
+            {
+                IDamageable dmg = hit.GetComponent<IDamageable>();
+                dmg?.TakeDamage(damage);
+            }
         }
 
         // Recovery

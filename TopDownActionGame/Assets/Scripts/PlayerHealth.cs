@@ -5,14 +5,21 @@ using UnityEngine.Animations;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
+    [Header("Health")]
     [SerializeField] private int maxHealth;
+
+    [Header("Knockback Settings")]
+    [SerializeField] private float knockbackForce = 3.5f;
+
     private int currentHealth;
+   // private Rigidbody2D rb;
 
     private CombatState combatState;
 
     private void Awake()
     {
         currentHealth = maxHealth;   
+        //rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
@@ -20,14 +27,39 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         combatState = FindFirstObjectByType<CombatState>();
     }
 
-    public void TakeDamage(int amount)
+
+    // Interface method (works for anything that only knows IDamageable)
+    public void TakeDamage(int damage)
     {
-        if (amount <= 0)
+        ApplyDamage(damage);
+    }
+
+    public void TakeDamage(int damage, Vector2 hitFromWorldPos)
+    {
+        ApplyDamage(damage);
+
+        Vector2 dir = (Vector2)transform.position - hitFromWorldPos;
+
+        if (dir.sqrMagnitude < 0.0001f)
+            return;
+
+        dir.Normalize();
+
+        var controller = GetComponent<PlayerController>();
+
+        if (controller != null)
+            controller.AddKnockback(dir * knockbackForce);
+
+    }
+
+    private void ApplyDamage(int damage)
+    {
+        if (damage <= 0)
             return;
 
         combatState?.NotifyCombat(3f);
 
-        currentHealth -= amount;
+        currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
         Debug.Log($"Player HP: {currentHealth}/{maxHealth}");
@@ -43,6 +75,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         Debug.Log("Player Died");
 
         var controller = GetComponent<PlayerController>();
+
         if (controller != null)
         {
             controller.enabled = false;

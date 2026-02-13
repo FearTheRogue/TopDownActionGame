@@ -44741,6 +44741,7 @@ MonoBehaviour:
   visuals: {fileID: 96546777}
   armPivot: {fileID: 1494405235}
   aimSmoothing: 15
+  knockbackDecay: 5
 --- !u!114 &1350970848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44773,7 +44774,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeeb0bc0335e70f4caab8700010d1e65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 100
+  maxHealth: 1000
+  knockbackForce: 15
 --- !u!114 &1350970850
 MonoBehaviour:
   m_ObjectHideFlags: 0
