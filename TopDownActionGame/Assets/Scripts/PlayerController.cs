@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
         //playerInput = GetComponent<PlayerInput>();
 
         playerInputActions = new PlayerInputActions();
-        playerInputActions.Player.Enable();
     }
 
     private void FixedUpdate()
@@ -91,6 +90,11 @@ public class PlayerController : MonoBehaviour
             flipper.FaceDirection(direction);
 
         armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+    }
+
+    private void OnEnable()
+    {
+        playerInputActions?.Player.Enable();
     }
 
     private void OnDisable()

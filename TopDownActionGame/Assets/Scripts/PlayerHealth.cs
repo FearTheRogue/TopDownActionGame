@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.Contracts;
 using System.Transactions;
 using UnityEngine;
@@ -17,6 +18,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private CombatState combatState;
     private HitFlash hitFlash;
 
+    public event Action OnDeath;
+    public event Action<int, int> OnHealthChanged; // current, max
+
     private void Awake()
     {
         currentHealth = maxHealth;
@@ -27,6 +31,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void Start()
     {
         combatState = FindFirstObjectByType<CombatState>();
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
 
@@ -56,7 +61,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     private void ApplyDamage(int damage)
     {
-        if (damage <= 0)
+        if (damage <= 0 || currentHealth <= 0)
             return;
 
         combatState?.NotifyCombat(3f);
@@ -65,12 +70,18 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         currentHealth = Mathf.Max(0, currentHealth);
 
         Debug.Log($"Player HP: {currentHealth}/{maxHealth}");
+
         hitFlash?.Play();
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
         if (currentHealth == 0)
-        {
-            Die();
-        }
+            OnDeath?.Invoke();
+    }
+
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
     private void Die()

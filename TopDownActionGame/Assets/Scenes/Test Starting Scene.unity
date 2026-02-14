@@ -44267,6 +44267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
   moveSpeed: 4
+  knockbackDecay: 14
 --- !u!50 &1300576885
 Rigidbody2D:
   serializedVersion: 5
