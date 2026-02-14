@@ -8,6 +8,9 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveDirection;
 
+    [SerializeField] private float knockbackDecay = 14f;
+    private Vector2 externalVelocity;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -25,7 +28,13 @@ public class EnemyMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = moveDirection * moveSpeed;
+        externalVelocity = Vector2.Lerp(externalVelocity, Vector2.zero, Time.fixedDeltaTime * knockbackDecay);
+        rb.linearVelocity = (moveDirection * moveSpeed) + externalVelocity;
+    }
+
+    public void AddKnockback(Vector2 impulse)
+    {
+        externalVelocity += impulse;
     }
 
     public void Stop()

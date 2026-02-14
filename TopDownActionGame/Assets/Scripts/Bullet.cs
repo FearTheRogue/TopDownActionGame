@@ -12,6 +12,9 @@ public class Bullet : MonoBehaviour
     [Header("Effects")]
     public GameObject impactEffect;
 
+    [Header("Knockback Force")]
+    [SerializeField] private float knockbackForce = 2.5f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -29,10 +32,22 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
-
-        if (enemyHealth != null)
+        if (other.TryGetComponent<EnemyHealth>(out var enemyHealth))
+        {
             enemyHealth.TakeDamage(damage);
+
+            // Knockback enemy away from the bullet
+            if (other.TryGetComponent<EnemyMovement>(out var enemyMove))
+            {
+                Vector2 dir = (Vector2)(other.transform.position - transform.position);
+
+                if (dir.sqrMagnitude > 0.0001f)
+                {
+                    dir.Normalize();
+                    enemyMove.AddKnockback(dir * knockbackForce);
+                }
+            }
+        }
 
         if (impactEffect != null)
             Instantiate(impactEffect, transform.position, Quaternion.identity);

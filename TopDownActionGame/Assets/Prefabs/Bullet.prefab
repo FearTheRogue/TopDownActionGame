@@ -205,3 +205,4 @@ MonoBehaviour:
   timeToLive: 4
   damage: 25
   impactEffect: {fileID: 5999593711267985948, guid: 14a47e52120ed084c83f1f8c99a8fc18, type: 3}
+  knockbackForce: 10
