@@ -51,6 +51,8 @@ public class PlayerRespawn : MonoBehaviour
             rb.angularVelocity = 0f;
         }
 
+        controller?.ClearExternalVelocity();
+
         StartCoroutine(RespawnRoutine());
     }
 
@@ -59,10 +61,11 @@ public class PlayerRespawn : MonoBehaviour
         yield return new WaitForSeconds(respawnDelay);
 
         // teleport to respawn
-        transform.position = respawnPoint.position;
+        rb.position = respawnPoint.position;
 
         // reset health
         health.ResetHealth();
+        controller?.ClearExternalVelocity();
 
         if (rb != null)
         {

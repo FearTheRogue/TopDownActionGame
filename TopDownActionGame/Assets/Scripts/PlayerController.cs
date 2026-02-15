@@ -92,6 +92,11 @@ public class PlayerController : MonoBehaviour
         armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
     }
 
+    public void ClearExternalVelocity()
+    {
+        externalVelocity = Vector2.zero;
+    }
+
     private void OnEnable()
     {
         playerInputActions?.Player.Enable();
