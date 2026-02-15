@@ -44780,6 +44780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 50
   knockbackForce: 15
+  damageCooldown: 0.5
 --- !u!114 &1350970850
 MonoBehaviour:
   m_ObjectHideFlags: 0

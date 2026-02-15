@@ -60,6 +60,10 @@ public class EnemyMeleeAttack : MonoBehaviour
 
         // hit
         Vector2 point = hitPoint != null ? (Vector2)hitPoint.position : (Vector2)transform.position;
+
+        if (hitPoint == null)
+            yield break;
+
         Collider2D hit = Physics2D.OverlapCircle(point, hitRadius, hitLayers);
 
         if (hit != null)

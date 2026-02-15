@@ -24,6 +24,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public event Action<int, int> OnHealthChanged; // current, max
 
     private bool invulnerable;
+    [SerializeField] private float damageCooldown = 0.5f;
+    private float damageCooldownTimer;
 
     private void Awake()
     {
@@ -38,6 +40,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
     }
 
+    private void Update()
+    {
+        if (damageCooldownTimer > 0f)
+            damageCooldownTimer -= Time.deltaTime;
+    }
 
     // Interface method (works for anything that only knows IDamageable)
     public void TakeDamage(int damage)
@@ -67,6 +74,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         if (damage <= 0 || currentHealth <= 0 || invulnerable)
             return;
+
+        if (damageCooldownTimer > 0f)
+            return;
+
+        damageCooldownTimer = damageCooldown;
 
         combatState?.NotifyCombat("PlayerHealth", 3f);
 
