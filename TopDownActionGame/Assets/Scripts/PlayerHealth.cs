@@ -27,6 +27,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     [SerializeField] private float damageCooldown = 0.5f;
     private float damageCooldownTimer;
 
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
+
     private void Awake()
     {
         currentHealth = maxHealth;
