@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Diagnostics.Contracts;
 using System.Transactions;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -20,6 +22,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     public event Action OnDeath;
     public event Action<int, int> OnHealthChanged; // current, max
+
+    private bool invulnerable;
 
     private void Awake()
     {
@@ -61,21 +65,34 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     private void ApplyDamage(int damage)
     {
-        if (damage <= 0 || currentHealth <= 0)
+        if (damage <= 0 || currentHealth <= 0 || invulnerable)
             return;
 
-        combatState?.NotifyCombat(3f);
+        combatState?.NotifyCombat("PlayerHealth", 3f);
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
-        Debug.Log($"Player HP: {currentHealth}/{maxHealth}");
+        //Debug.Log($"Player HP: {currentHealth}/{maxHealth}");
 
         hitFlash?.Play();
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
         if (currentHealth == 0)
             OnDeath?.Invoke();
+    }
+
+    public void SetInvulnerable(float seconds)
+    {
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(InvulnRoutine(seconds));
+    }
+
+    private IEnumerator InvulnRoutine(float seconds)
+    {
+        invulnerable = true;
+        yield return new WaitForSeconds(seconds);
+        invulnerable = false;
     }
 
     public void ResetHealth()

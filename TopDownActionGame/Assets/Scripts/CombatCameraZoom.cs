@@ -42,6 +42,9 @@ public class CombatCameraZoom : MonoBehaviour
         if (exploreCam == null || combatCam == null)
             return;
 
+        Debug.Log($"Camera combat changed: {inCombat} (CombatState id {combatState.GetInstanceID()})");
+
+
         exploreCam.Priority = inCombat ? explorePriority : combatPriority;
         combatCam.Priority = inCombat ? combatPriority : explorePriority;
     }

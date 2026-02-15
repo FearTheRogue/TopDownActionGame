@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
         // decay external velocity smoothly
         externalVelocity = Vector2.Lerp(externalVelocity, Vector2.zero, Time.fixedDeltaTime * knockbackDecay);
 
-        rb.linearVelocity = (move * moveSpeed) + externalVelocity;
+        rb.linearVelocity = (move * moveSpeed) + externalVelocity; 
     }
 
     public void AddKnockback(Vector2 impulse)

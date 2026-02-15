@@ -1,4 +1,6 @@
 using System;
+using System.Data.Common;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatState : MonoBehaviour
@@ -29,9 +31,18 @@ public class CombatState : MonoBehaviour
     }
 
     // Enemy engages or the player takes damage
-    public void NotifyCombat(float extraHoldTime = -1f)
+    public void NotifyCombat(string source, float extraHoldTime = -1f)
     {
+        Debug.Log($"NotifyCombat source: {source}");
         float hold = extraHoldTime > 0f ? extraHoldTime : combatHoldTime;
         timer = MathF.Max(timer, hold);
+    }
+
+    public void ClearCombat()
+    {
+        timer = 0f;
+
+        lastState = false;
+        OnCombatChanged?.Invoke(false);
     }
 }

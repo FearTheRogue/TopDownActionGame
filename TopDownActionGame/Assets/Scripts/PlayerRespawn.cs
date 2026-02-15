@@ -14,11 +14,16 @@ public class PlayerRespawn : MonoBehaviour
     private Rigidbody2D rb;
     private bool isDead;
 
+    [SerializeField] private CombatState combatState;
+
     private void Awake()
     {
         health = GetComponent<PlayerHealth>();
         controller = GetComponent<PlayerController>();
         rb = GetComponent<Rigidbody2D>();
+
+        if (combatState == null)
+            combatState = FindFirstObjectByType<CombatState>();
 
         if (respawnPoint == null)
             respawnPoint = transform;
@@ -40,6 +45,8 @@ public class PlayerRespawn : MonoBehaviour
             return;
 
         isDead = true;
+
+        combatState?.ClearCombat();
 
         // Disable control & stop motion
         if (controller != null)
@@ -65,7 +72,12 @@ public class PlayerRespawn : MonoBehaviour
 
         // reset health
         health.ResetHealth();
+        health.SetInvulnerable(1.0f);
+
         controller?.ClearExternalVelocity();
+        combatState?.ClearCombat();
+        Debug.Log($"Clearing combat state: {combatState.name} (id {combatState.GetInstanceID()})");
+
 
         if (rb != null)
         {

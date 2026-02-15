@@ -19,6 +19,9 @@ public class EnemyBehaviour : MonoBehaviour
     private EnemyPatrol patrol;
     private CombatState combatState;
 
+    [SerializeField] private float combatPingInterval = 0.25f;
+    private float combatPingTimer;
+
     private void Awake()
     {
         movement = GetComponent<EnemyMovement>();
@@ -39,9 +42,14 @@ public class EnemyBehaviour : MonoBehaviour
         Vector2 direction = (player.position - transform.position);
         float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance <= detectionRange)
+        combatPingTimer -= Time.deltaTime;
+
+        bool isEngaging = distance <= detectionRange && distance > stopRange;
+
+        if (isEngaging && combatPingTimer <= 0f)
         {
-            combatState?.NotifyCombat();
+            combatState?.NotifyCombat("EnemyBahaviour");
+            combatPingTimer = combatPingInterval;
         }
 
         if (distance > detectionRange)

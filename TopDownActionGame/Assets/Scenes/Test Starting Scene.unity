@@ -1242,7 +1242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 569eaa2d38a48cf4f9416f9b09f89459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatCameraZoom
-  combatState: {fileID: 0}
+  combatState: {fileID: 327958649}
   exploreCam: {fileID: 1443755525}
   combatCam: {fileID: 1585082087}
   explorePriority: 10
@@ -44329,6 +44329,7 @@ MonoBehaviour:
   stopRange: 3
   wanderSpeed: 1
   chaseSpeed: 3
+  combatPingInterval: 0.25
 --- !u!114 &1300576888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44777,7 +44778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeeb0bc0335e70f4caab8700010d1e65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 100
+  maxHealth: 50
   knockbackForce: 15
 --- !u!114 &1350970850
 MonoBehaviour:
@@ -44835,6 +44836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
   respawnPoint: {fileID: 1788559906}
   respawnDelay: 2.5
+  combatState: {fileID: 327958649}
 --- !u!1 &1413295397
 GameObject:
   m_ObjectHideFlags: 0
