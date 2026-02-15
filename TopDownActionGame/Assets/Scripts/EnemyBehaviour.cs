@@ -39,6 +39,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (player == null)
+            return;
+
         Vector2 direction = (player.position - transform.position);
         float distance = Vector2.Distance(transform.position, player.position);
 
@@ -58,10 +61,14 @@ public class EnemyBehaviour : MonoBehaviour
             {
                 patrol.Patrol();
             }
-            else
+            else if (wander != null)
             {
                 movement.SetSpeed(wanderSpeed);
                 wander.Wander();
+            }
+            else
+            {
+                movement.Stop();
             }
 
             return;
