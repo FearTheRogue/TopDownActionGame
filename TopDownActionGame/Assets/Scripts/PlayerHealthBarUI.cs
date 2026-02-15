@@ -8,6 +8,11 @@ public class PlayerHealthBarUI : MonoBehaviour
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private Image fillImage;
 
+    [Header("Animation")]
+    [SerializeField] private float fillSpeed = 8f;
+
+    private float targetFill = 1f;
+
     private void Awake()
     {
         if (playerHealth == null)
@@ -30,14 +35,30 @@ public class PlayerHealthBarUI : MonoBehaviour
     {
         // Force an initial update
         if (playerHealth != null)
-            HandleHealthChanged(playerHealth.CurrentHealth, playerHealth.MaxHealth);
+        {
+            targetFill = Mathf.Clamp01((float)playerHealth.CurrentHealth / playerHealth.MaxHealth);
+            
+            if (fillImage != null)
+                fillImage.fillAmount = targetFill;
+        }
+    }
+
+    private void Update()
+    {
+        if (fillImage == null)
+            return;
+
+        fillImage.fillAmount = Mathf.Lerp(fillImage.fillAmount, targetFill, Time.deltaTime * fillSpeed);
+
+        if (Mathf.Abs(fillImage.fillAmount - targetFill) < 0.001f)
+            fillImage.fillAmount = targetFill;
     }
 
     private void HandleHealthChanged(int current, int max)
     {
-        if (fillImage == null || max <= 0)
+        if (max <= 0)
             return;
 
-        fillImage.fillAmount = Mathf.Clamp01((float)current / max);
+        targetFill = Mathf.Clamp01((float)current / max);
     }
 }
