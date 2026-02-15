@@ -49029,6 +49029,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 1730157444956295928, guid: 45b7212df08175e48ae7b0a298a16bc0, type: 3}
+      propertyPath: chaseSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1879105059675151016, guid: 45b7212df08175e48ae7b0a298a16bc0, type: 3}
       propertyPath: m_Name
       value: Thicket Stalker

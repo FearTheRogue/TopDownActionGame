@@ -1,6 +1,9 @@
+using NUnit.Framework.Constraints;
 using System.Collections;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(EnemyMovement))]
@@ -18,6 +21,14 @@ public class EnemyAmbushStalker : MonoBehaviour
     [Header("Ambush Trigger")]
     [SerializeField] private float triggerRange = 5f;
 
+    [Header("Reset")]
+    [SerializeField] private float disengageRange = 10f;
+    [SerializeField] private float resetDelay = 0.5f;
+    [SerializeField] private bool pickNewAmbushSpot = false;
+    [SerializeField] private float ambushRadius;
+    [SerializeField] private float returnSpeed = 4f;
+    [SerializeField] private float arriveDistance = 0.2f;
+
     [Header("Telegraph")]
     [SerializeField] private float revealDelay = .15f;
     [SerializeField] private float telegraphTime = 0.35f;
@@ -30,7 +41,13 @@ public class EnemyAmbushStalker : MonoBehaviour
     [SerializeField] private float postLungePause = 0.1f;
 
     private EnemyMovement movement;
+
     private bool triggered;
+    private bool ambushing;
+    private Coroutine routine;
+
+    private Vector2 startPos;
+    private Vector2 ambushSpot;
 
     private void Awake()
     {
@@ -45,39 +62,65 @@ public class EnemyAmbushStalker : MonoBehaviour
 
     private void Start()
     {
-        GameObject targetGameObject = GameObject.FindGameObjectWithTag(targetTag);
+        startPos = transform.position;
+        ambushSpot = startPos;
 
-        if (targetGameObject != null)
-            target = targetGameObject.transform;
+        FindTarget();
 
-        // Start hidden/dormant
-        if (visuals != null)
-            visuals.gameObject.SetActive(false);
-
-        if (behaviour != null)
-        {
-            behaviour.enabled = false;
-            movement.Stop();
-        }
+        // Start hidden/ dormant
+        SetHidden(true);
+        DisableNormalAI();
     }
 
     private void Update()
     {
-        if (triggered || target == null) return;
+        // If player object changed after respawn, re-find it
+        if (target == null)
+        {
+            FindTarget();
+            return;
+        }
 
-        float dist = Vector2.Distance(transform.position, target.position);
+        if (!triggered && !ambushing)
+        {
+            float dist = Vector2.Distance(transform.position, target.position);
 
-        if (dist <= triggerRange)
-            StartCoroutine(AmbushRoutine());
+            if (dist <= triggerRange)
+                StartAmbush();
+        } 
+        else if (triggered && !ambushing)
+        {
+            // After ambush, normal AI is enabled. If the player escapes far enough, reset.
+            float dist = Vector2.Distance(transform.position, target.position);
+
+            if (dist >= disengageRange)
+                ResetToAmbush();
+        }
+    }
+
+    private void FindTarget()
+    {
+        var go = GameObject.FindGameObjectWithTag(targetTag);
+
+        if (go != null)
+            target = go.transform;
+    }
+
+    private void StartAmbush()
+    {
+        if (routine != null)
+            StopCoroutine(routine);
+
+        routine = StartCoroutine(AmbushRoutine());
     }
 
     private IEnumerator AmbushRoutine()
     {
         triggered = true;
+        ambushing = true;
 
         // reveal
-        if (visuals != null)
-            visuals.gameObject.SetActive(true);
+        SetHidden(false);
 
         yield return new WaitForSeconds(revealDelay);
 
@@ -102,13 +145,101 @@ public class EnemyAmbushStalker : MonoBehaviour
         yield return new WaitForSeconds(postLungePause);
 
         // Hand off to normal AI
-        if (behaviour != null) 
+        EnableNormalAI();
+
+        ambushing = false;
+        routine = null;
+    }
+
+    private void ResetToAmbush()
+    {
+        if (routine != null)
+            StopCoroutine(routine);
+
+        routine = StartCoroutine(ResetRoutine());
+    }
+
+    private IEnumerator ResetRoutine()
+    {
+        ambushing = true;
+
+        DisableNormalAI();
+        movement.Stop();
+
+        yield return new WaitForSeconds(resetDelay);
+
+        // Decide ambush point
+        ambushSpot = pickNewAmbushSpot ? PickNewAmbushSpot() : startPos;
+
+        // Return to ambush spot
+        while (((Vector2)transform.position - ambushSpot).magnitude > arriveDistance)
+        {
+            Vector2 dir = (ambushSpot - (Vector2)transform.position);
+
+            if (dir.sqrMagnitude > 0.001f && facing != null)
+                facing.FaceDirection(dir);
+
+            movement.SetSpeed(returnSpeed);
+            movement.SetMoveDirection(dir);
+
+            yield return null;
+        }
+
+        movement.Stop();
+
+        // Hide again and wait
+        SetHidden(true);
+        triggered = false;
+        ambushing = false;
+        routine = null;
+    }
+
+    private Vector2 PickNewAmbushSpot()
+    {
+        if (ambushRadius <= 0f)
+            return startPos;
+
+        return startPos + Random.insideUnitCircle * ambushRadius;
+    }
+
+    private void DisableNormalAI()
+    {
+        if (behaviour != null)
+            behaviour.enabled = false;
+    }
+
+    private void EnableNormalAI()
+    {
+        if (behaviour != null)
             behaviour.enabled = true;
+    }
+
+    private void SetHidden(bool isHidden)
+    {
+        if (visuals != null)
+            visuals.gameObject.SetActive(!isHidden);
+    }
+
+    public void ForceHideNow()
+    {
+        if (routine != null)
+            StopCoroutine(routine);
+
+        DisableNormalAI();
+        movement.Stop();
+        transform.position = ambushSpot;
+        SetHidden(true);
+        triggered = false;
+        ambushing = false;
+        routine = null;
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.4f, 0.1f);
         Gizmos.DrawWireSphere(transform.position, triggerRange);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, disengageRange);
     }
 }
