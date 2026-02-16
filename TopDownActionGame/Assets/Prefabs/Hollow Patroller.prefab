@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3701229589835134854}
   - component: {fileID: 9154688840639579843}
   - component: {fileID: 8020603558762153881}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Enemy Health Bar Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.812}
+  m_AnchoredPosition: {x: 0, y: 1.09}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &9154688840639579843
@@ -60,7 +60,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &8020603558762153881
 MonoBehaviour:
@@ -85,7 +85,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3015971559887855244}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Arm Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,15 +120,15 @@ GameObject:
   - component: {fileID: 2865276774149619264}
   - component: {fileID: 1723024749429720172}
   - component: {fileID: 5413049276589267966}
-  - component: {fileID: 7976748120458377209}
-  - component: {fileID: 1521841280646415842}
+  - component: {fileID: 3156053109593581342}
   - component: {fileID: 9117799454398677617}
   - component: {fileID: 2261045374031209635}
+  - component: {fileID: 7976748120458377209}
   - component: {fileID: 2594632731456906831}
   - component: {fileID: 8081724052227469614}
-  - component: {fileID: 4823483418883196882}
-  m_Layer: 0
-  m_Name: Hollow Wanderer
+  - component: {fileID: 4774452364545126066}
+  m_Layer: 11
+  m_Name: Hollow Patroller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &7976748120458377209
+--- !u!114 &3156053109593581342
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,26 +224,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2275237409791555318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5598f64a22bc03348b86d696f3e25cc0, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c590da46da7987439cfd4f7d29378cf, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  moveSpeed: 8
---- !u!114 &1521841280646415842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2275237409791555318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d0f46fc389943439c6adf5671e0daf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBehaviour
-  detectionRange: 6.13
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
+  detectionRange: 6.1
   stopRange: 1.2
   wanderSpeed: 4
   chaseSpeed: 6
+  patrol: {fileID: 0}
+  wander: {fileID: 0}
+  ambush: {fileID: 0}
+  melee: {fileID: 0}
+  combatPingInterval: 0.25
 --- !u!114 &9117799454398677617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +265,20 @@ MonoBehaviour:
   rotationSpeed: 5
   visuals: {fileID: 8593946099201533660}
   armPivot: {fileID: 3015971559887855244}
+--- !u!114 &7976748120458377209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2275237409791555318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5598f64a22bc03348b86d696f3e25cc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  moveSpeed: 8
+  knockbackDecay: 14
 --- !u!114 &2594632731456906831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,7 +315,7 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 1024
---- !u!114 &4823483418883196882
+--- !u!114 &4774452364545126066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -318,11 +324,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2275237409791555318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 272d5531f56e9794588c7425944b9c01, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d3f74b1297763d438e2f289d00d7abc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyWander
-  wanderRadius: 4.8
-  wanderDelay: 10
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyPatrol
+  patrolPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  arriveDistance: 0.2
+  waitTime: 1
+  patrolSpeed: 1.5
 --- !u!1 &2518894394700339882
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8593946099201533660}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Body Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -366,7 +376,7 @@ GameObject:
   - component: {fileID: 7775094057953034355}
   - component: {fileID: 3188057970412730121}
   - component: {fileID: 2270739516470184724}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -439,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7908516977434832576}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Fire Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -471,7 +481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2843908076696330599}
   - component: {fileID: 7972239406242679135}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sprite Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,7 +571,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1082138347797870614}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Hit Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -594,7 +604,7 @@ GameObject:
   - component: {fileID: 5176999921198033787}
   - component: {fileID: 8027506443713999456}
   - component: {fileID: 4415813748123388884}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
