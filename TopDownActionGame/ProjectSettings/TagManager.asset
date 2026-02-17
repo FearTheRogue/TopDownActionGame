@@ -42,5 +42,26 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 3508245201
+    locked: 0
+  - name: Cliffs
+    uniqueID: 550275847
+    locked: 0
+  - name: GroundDetails
+    uniqueID: 1582378249
+    locked: 0
+  - name: World
+    uniqueID: 2146080957
+    locked: 0
+  - name: CanopyFront
+    uniqueID: 809826943
+    locked: 0
+  - name: FX
+    uniqueID: 111326787
+    locked: 0
+  - name: UI
+    uniqueID: 2970769353
+    locked: 0
   m_RenderingLayers:
   - Default
