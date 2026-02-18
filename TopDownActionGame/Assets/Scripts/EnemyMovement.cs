@@ -11,9 +11,12 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float knockbackDecay = 14f;
     private Vector2 externalVelocity;
 
+    private HitReaction hitReaction;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        hitReaction = GetComponent<HitReaction>();
     }
 
     public void SetMoveDirection(Vector2 direction)
@@ -29,6 +32,14 @@ public class EnemyMovement : MonoBehaviour
     private void FixedUpdate()
     {
         externalVelocity = Vector2.Lerp(externalVelocity, Vector2.zero, Time.fixedDeltaTime * knockbackDecay);
+
+        if (hitReaction != null && hitReaction.IsStunned)
+        {
+            // Freeze movement while stunned
+            rb.linearVelocity = externalVelocity;
+            return;
+        }
+
         rb.linearVelocity = (moveDirection * moveSpeed) + externalVelocity;
     }
 
@@ -41,5 +52,6 @@ public class EnemyMovement : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         moveDirection = Vector2.zero;
+        //externalVelocity = Vector2.zero;
     }
 }

@@ -47,6 +47,12 @@ public class Bullet : MonoBehaviour
                     enemyMove.AddKnockback(dir * knockbackForce);
                 }
             }
+
+            // Stun enemy
+            if (other.TryGetComponent<HitReaction>(out var reaction))
+            {
+                reaction.HitStun();
+            }
         }
 
         if (impactEffect != null)
