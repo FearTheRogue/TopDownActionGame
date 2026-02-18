@@ -10,9 +10,12 @@ public class EnemyHealth : MonoBehaviour
     public event Action OnDamage;
     public event Action OnDeath;
 
+    private HitFlash hitFlash;
+
     private void Awake()
     {
         currentHealth = maxHealth;
+        hitFlash = GetComponent<HitFlash>();
     }
 
     /// <summary>
@@ -23,6 +26,8 @@ public class EnemyHealth : MonoBehaviour
         if (amount <= 0) return;
 
         currentHealth -= amount;
+
+        hitFlash?.Play();
         OnDamage?.Invoke();
 
         if (currentHealth <= 0)
