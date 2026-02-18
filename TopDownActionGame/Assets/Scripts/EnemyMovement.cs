@@ -54,4 +54,9 @@ public class EnemyMovement : MonoBehaviour
         moveDirection = Vector2.zero;
         //externalVelocity = Vector2.zero;
     }
+
+    public void StopMove()
+    {
+        moveDirection = Vector2.zero;
+    }
 }

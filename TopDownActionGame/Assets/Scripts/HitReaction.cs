@@ -28,7 +28,7 @@ public class HitReaction : MonoBehaviour
     private IEnumerator HitStunRoutine()
     {
         stunned = true;
-        movement.Stop();
+        movement.StopMove();
         yield return new WaitForSeconds(hitStunTime);
         stunned = false;
         routine = null;
