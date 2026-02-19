@@ -1566,7 +1566,8 @@ MonoBehaviour:
   flashes: 5
   flashOnTime: 0.06
   flashOffTime: 0.08
-  toggleVisibility: 0
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashIntensity: 1
 --- !u!4 &380972124 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5235740845109742047, guid: caa371aff5ba4c84b8681057bcc41727, type: 3}
@@ -5116,7 +5117,8 @@ MonoBehaviour:
   flashes: 3
   flashOnTime: 0.06
   flashOffTime: 0.08
-  toggleVisibility: 0
+  flashColor: {r: 0.17150229, g: 0.84348214, b: 0.8867924, a: 1}
+  flashIntensity: 1
 --- !u!1001 &712372627
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47091,7 +47093,8 @@ MonoBehaviour:
   flashes: 2
   flashOnTime: 0.06
   flashOffTime: 0.08
-  toggleVisibility: 1
+  flashColor: {r: 1, g: 0.504717, b: 0.504717, a: 1}
+  flashIntensity: 1
 --- !u!1001 &1217391812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47955,7 +47958,8 @@ MonoBehaviour:
   flashes: 2
   flashOnTime: 0.06
   flashOffTime: 0.08
-  toggleVisibility: 1
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashIntensity: 1
 --- !u!114 &1350970853
 MonoBehaviour:
   m_ObjectHideFlags: 0
