@@ -48051,6 +48051,7 @@ GameObject:
   - component: {fileID: 1350970851}
   - component: {fileID: 1350970852}
   - component: {fileID: 1350970853}
+  - component: {fileID: 1350970854}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -48248,6 +48249,22 @@ MonoBehaviour:
   respawnPoint: {fileID: 1788559906}
   respawnDelay: 2.5
   combatState: {fileID: 327958649}
+--- !u!114 &1350970854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350970843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2661e7f62a6c2fa4b9e92b66eb7560e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
+  dashForce: 125
+  dashDuration: 0.15
+  dashCooldown: 2
+  invulnerableTime: 0.2
 --- !u!1 &1413295397
 GameObject:
   m_ObjectHideFlags: 0

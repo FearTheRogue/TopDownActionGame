@@ -1,4 +1,5 @@
 using System;
+using Unity.Cinemachine;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -95,6 +96,16 @@ public class PlayerController : MonoBehaviour
     public void ClearExternalVelocity()
     {
         externalVelocity = Vector2.zero;
+    }
+
+    public Vector2 GetMoveInput()
+    {
+        return inputVector;
+    }
+
+    public void AddDash(Vector2 impulse)
+    {
+        externalVelocity += impulse;
     }
 
     private void OnEnable()
