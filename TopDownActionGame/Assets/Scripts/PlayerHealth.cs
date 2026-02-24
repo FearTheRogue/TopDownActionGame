@@ -75,6 +75,10 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     private void ApplyDamage(int damage)
     {
+        var dash = GetComponent<PlayerDash>();
+        if (dash != null && dash.IsInvulnerable)
+            return;
+
         if (damage <= 0 || currentHealth <= 0 || invulnerable)
             return;
 

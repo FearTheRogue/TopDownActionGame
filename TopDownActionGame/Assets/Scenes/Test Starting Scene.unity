@@ -48262,7 +48262,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
   dashForce: 125
-  dashDuration: 0.15
   dashCooldown: 2
   invulnerableTime: 0.2
 --- !u!1 &1413295397

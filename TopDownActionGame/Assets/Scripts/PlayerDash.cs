@@ -9,7 +9,6 @@ public class PlayerDash : MonoBehaviour
 {
     [Header("Dash Settings")]
     [SerializeField] private float dashForce = 12f;
-    [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private float dashCooldown = 2f;
 
     [Header("Invulnerability")]
@@ -19,8 +18,10 @@ public class PlayerDash : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerInputActions playerInput;
 
-    private bool isDashing;
     private bool canDash = true;
+
+    private float invulnTimer;
+    public bool IsInvulnerable => invulnTimer > 0f;
 
     private void Awake()
     {
@@ -46,7 +47,15 @@ public class PlayerDash : MonoBehaviour
 
         controller.AddDash(dir * dashForce);
 
+        invulnTimer = invulnerableTime;
+
         StartCoroutine(CooldownRoutine());
+    }
+
+    private void Update()
+    {
+        if (invulnTimer > 0f)
+            invulnTimer -= Time.deltaTime;
     }
 
     private IEnumerator CooldownRoutine()
