@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.Serialization;
 using Unity.VisualScripting;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
@@ -18,10 +19,15 @@ public class PlayerDash : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerInputActions playerInput;
 
+    private float cooldownTimer;
+
     private bool canDash = true;
 
     private float invulnTimer;
     public bool IsInvulnerable => invulnTimer > 0f;
+    public bool IsReady => cooldownTimer <= 0f;
+    public float CooldownRemaining => Mathf.Max(0f, cooldownTimer);
+    public float CooldownDuration => dashCooldown;
 
     private void Awake()
     {
@@ -35,7 +41,7 @@ public class PlayerDash : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext context)
     {
-        if (!canDash)
+        if (!canDash || !IsReady)
             return;
 
         Vector2 dir = controller.GetMoveInput();
@@ -52,13 +58,17 @@ public class PlayerDash : MonoBehaviour
 
         invulnTimer = invulnerableTime;
 
-        StartCoroutine(CooldownRoutine());
+        //StartCoroutine(CooldownRoutine());
+        cooldownTimer = dashCooldown;
     }
 
     private void Update()
     {
         if (invulnTimer > 0f)
             invulnTimer -= Time.deltaTime;
+
+        if (cooldownTimer > 0f)
+            cooldownTimer -= Time.deltaTime;
     }
 
     private IEnumerator CooldownRoutine()
