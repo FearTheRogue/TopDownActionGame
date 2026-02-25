@@ -41,7 +41,10 @@ public class PlayerDash : MonoBehaviour
         Vector2 dir = controller.GetMoveInput();
 
         if (dir.sqrMagnitude < 0.01f)
-            dir = transform.right;
+        {
+            // dash in aim direction
+            dir = controller.GetAimDirection();
+        }
 
         dir.Normalize();
 

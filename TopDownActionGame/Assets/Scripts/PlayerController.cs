@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float knockbackDecay = 12f;
     private Vector2 externalVelocity;
 
+    private Vector2 aimDirection;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -69,7 +71,8 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (visuals == null || cam == null) return;
+        if (visuals == null || cam == null)
+            return;
 
         Vector2 mouseScreen = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
         Vector3 mouseWorld = cam.ScreenToWorldPoint(mouseScreen);
@@ -77,20 +80,23 @@ public class PlayerController : MonoBehaviour
 
         Vector2 direction = (Vector2)mouseWorld - (Vector2)armPivot.position;
 
-        if (direction.sqrMagnitude < 0.0001f) return;
+        if (direction.sqrMagnitude > 0.0001f)
+        {
+            aimDirection = direction.normalized;
 
-        targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        if (aimSmoothing > 0f)
-            currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * aimSmoothing);
-        else
-            currentAngle = targetAngle;
+            if (aimSmoothing > 0f)
+                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * aimSmoothing);
+            else
+                currentAngle = targetAngle;
 
-        //visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
-        if(flipper != null)
-            flipper.FaceDirection(direction);
+            //visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+            if (flipper != null)
+                flipper.FaceDirection(direction);
 
-        armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+            armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+        }
     }
 
     public void ClearExternalVelocity()
@@ -101,6 +107,11 @@ public class PlayerController : MonoBehaviour
     public Vector2 GetMoveInput()
     {
         return inputVector;
+    }
+
+    public Vector2 GetAimDirection()
+    {
+        return aimDirection.sqrMagnitude > 0.001f ? aimDirection : transform.right;
     }
 
     public void AddDash(Vector2 impulse)
