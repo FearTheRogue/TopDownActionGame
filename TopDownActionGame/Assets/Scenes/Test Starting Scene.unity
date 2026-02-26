@@ -1772,7 +1772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16758555aab33b340b16b165ec7e34ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitReaction
-  hitStunTime: 0.25
+  defaultHitStunTime: 0.08
 --- !u!114 &380918632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5323,7 +5323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16758555aab33b340b16b165ec7e34ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitReaction
-  hitStunTime: 0.2
+  defaultHitStunTime: 0.08
 --- !u!114 &701597850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47556,7 +47556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16758555aab33b340b16b165ec7e34ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HitReaction
-  hitStunTime: 0.125
+  defaultHitStunTime: 0.08
 --- !u!114 &1209019365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48487,9 +48487,11 @@ MonoBehaviour:
   radius: 2.2
   force: 64
   cooldown: 7
+  damage: 2
   enemyLayers:
     serializedVersion: 2
     m_Bits: 2048
+  stunTime: 0.6
 --- !u!1 &1413295397
 GameObject:
   m_ObjectHideFlags: 0

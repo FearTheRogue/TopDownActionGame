@@ -8,7 +8,9 @@ public class AbilityBurst : MonoBehaviour
     [SerializeField] private float radius = 2.2f;
     [SerializeField] private float force = 7f;
     [SerializeField] private float cooldown = 7f;
+    [SerializeField] private int damage = 2;
     [SerializeField] private LayerMask enemyLayers;
+    [SerializeField] private float stunTime = 0.2f;
 
     private float cooldownTimer;
     private PlayerInputActions playerInput;
@@ -41,16 +43,24 @@ public class AbilityBurst : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<EnemyMovement>(out var move))
-            {
-                Vector2 dir = (hit.transform.position - transform.position).normalized;
-                move.AddKnockback(dir * force);
-            }
+            Vector2 dir = (hit.transform.position - transform.position);
 
+            if (dir.sqrMagnitude < 0.0001f)
+                continue;
+
+            dir.Normalize();
+
+            // Knockback
+            if (hit.TryGetComponent<EnemyMovement>(out var move))
+                move.AddKnockback(dir * force);
+
+            // Stun
             if (hit.TryGetComponent<HitReaction>(out var reaction))
-            {
-                reaction.HitStun();
-            }
+                reaction.HitStun(stunTime);
+
+            // Damage
+            if (hit.TryGetComponent<IDamageable>(out var dmg))
+                dmg.TakeDamage(damage);
         }
 
         cooldownTimer = cooldown;
