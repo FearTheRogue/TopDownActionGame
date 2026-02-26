@@ -163,6 +163,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AbilityBurst"",
+                    ""type"": ""Button"",
+                    ""id"": ""229cc267-cf52-4724-bed2-26e7ff78c2b8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -297,6 +306,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3bb3111-00f8-4e04-a738-1e93a20fac9d"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AbilityBurst"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -325,6 +345,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Switch3 = m_Player.FindAction("Switch3", throwIfNotFound: true);
         m_Player_ScrollWheel = m_Player.FindAction("ScrollWheel", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_AbilityBurst = m_Player.FindAction("AbilityBurst", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -413,6 +434,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Switch3;
     private readonly InputAction m_Player_ScrollWheel;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_AbilityBurst;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -456,6 +478,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Dash".
         /// </summary>
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/AbilityBurst".
+        /// </summary>
+        public InputAction @AbilityBurst => m_Wrapper.m_Player_AbilityBurst;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -506,6 +532,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @AbilityBurst.started += instance.OnAbilityBurst;
+            @AbilityBurst.performed += instance.OnAbilityBurst;
+            @AbilityBurst.canceled += instance.OnAbilityBurst;
         }
 
         /// <summary>
@@ -541,6 +570,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @AbilityBurst.started -= instance.OnAbilityBurst;
+            @AbilityBurst.performed -= instance.OnAbilityBurst;
+            @AbilityBurst.canceled -= instance.OnAbilityBurst;
         }
 
         /// <summary>
@@ -650,5 +682,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDash(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "AbilityBurst" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAbilityBurst(InputAction.CallbackContext context);
     }
 }
