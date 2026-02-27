@@ -51,16 +51,17 @@ public class AbilityBurst : MonoBehaviour
             dir.Normalize();
 
             // Knockback
-            if (hit.TryGetComponent<EnemyMovement>(out var move))
-                move.AddKnockback(dir * force);
+            var move = hit.GetComponentInParent<EnemyMovement>();
+            move?.AddKnockback(dir * force);
 
             // Stun
-            if (hit.TryGetComponent<HitReaction>(out var reaction))
-                reaction.HitStun(stunTime);
+            var reaction = hit.GetComponentInParent<HitReaction>();
+            reaction?.HitStun(stunTime);
 
             // Damage
-            if (hit.TryGetComponent<IDamageable>(out var dmg))
-                dmg.TakeDamage(damage);
+            var enemyHealth = hit.GetComponentInParent<EnemyHealth>();
+            if (enemyHealth != null)
+                enemyHealth.TakeDamage(damage);
         }
 
         cooldownTimer = cooldown;
