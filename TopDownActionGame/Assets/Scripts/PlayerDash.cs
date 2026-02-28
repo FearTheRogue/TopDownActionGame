@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerDash : MonoBehaviour
+public class PlayerDash : MonoBehaviour, IAbilityCooldown
 {
     [Header("Dash Settings")]
     [SerializeField] private float dashForce = 12f;

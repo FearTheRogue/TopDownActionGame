@@ -2,7 +2,7 @@ using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class AbilityBurst : MonoBehaviour
+public class AbilityBurst : MonoBehaviour, IAbilityCooldown
 {
     [Header("Burst Settings")]
     [SerializeField] private float radius = 2.2f;
@@ -14,6 +14,10 @@ public class AbilityBurst : MonoBehaviour
 
     private float cooldownTimer;
     private PlayerInputActions playerInput;
+
+    public bool IsReady => cooldownTimer <= 0f;
+    public float CooldownRemaining => Mathf.Max(0f, cooldownTimer);
+    public float CooldownDuration => cooldown;
 
     private void Awake()
     {
