@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -24,6 +24,11 @@ public class PlayerShooting : MonoBehaviour
 
     private float scrollCooldown = 0.2f;
     private float lastScrollTime;
+
+    private int currentCharges;
+    private float rechargeTimer;
+
+    private float nextShotTime;
 
     private void Awake()
     {
@@ -57,12 +62,27 @@ public class PlayerShooting : MonoBehaviour
 
         if (currentWeapon.weaponType == WeaponType.Automatic && isShooting)
         {
-            shotTimer -= Time.deltaTime;
+            //shotTimer -= Time.deltaTime;
 
-            if (shotTimer <= 0f)
+            //if (shotTimer <= 0f)
+            //{
+            //    FireBullet();
+            //    shotTimer = currentWeapon.fireRate;
+            //}
+            TryFireOnce();
+        }
+
+        if (currentWeapon != null && currentWeapon.usesCharges)
+        {
+            if (currentCharges < currentWeapon.maxCharges)
             {
-                FireBullet();
-                shotTimer = currentWeapon.fireRate;
+                rechargeTimer += Time.deltaTime;
+
+                if (rechargeTimer >= currentWeapon.rechargeTime)
+                {
+                    currentCharges++;
+                    rechargeTimer = 0f;
+                }
             }
         }
     }
@@ -90,7 +110,7 @@ public class PlayerShooting : MonoBehaviour
         switch (currentWeapon.weaponType)
         {
             case WeaponType.Pistol:
-                FireBullet();
+                TryFireOnce();
                 break;
             case WeaponType.Automatic:
                 isShooting = true;
@@ -108,13 +128,17 @@ public class PlayerShooting : MonoBehaviour
             isShooting = false;
     }
 
-
-
     private void FireBullet()
     {
-        if (currentWeapon == null || currentWeapon.bulletPrefab == null) return;
+        if (currentWeapon == null || currentWeapon.bulletPrefab == null)
+            return;
 
-        GameObject bulletObj = Instantiate(currentWeapon.bulletPrefab, firePoint.position, firePoint.rotation);
+        float spread = currentWeapon.spreadAngle;
+        float angleOffset = UnityEngine.Random.Range(-spread, spread);
+
+        Quaternion rot = firePoint.rotation * Quaternion.Euler(0f, 0f, angleOffset);
+
+        GameObject bulletObj = Instantiate(currentWeapon.bulletPrefab, firePoint.position, rot);
 
         Bullet bullet = bulletObj.GetComponent<Bullet>();
 
@@ -150,6 +174,11 @@ public class PlayerShooting : MonoBehaviour
         isShooting = false;
         isBursting = false;
 
+        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : -0;
+        rechargeTimer = 0f;
+
+        nextShotTime = 0f;
+
         Debug.Log($"Equipped weapon {currentWeapon.weaponName}");
     }
 
@@ -163,6 +192,23 @@ public class PlayerShooting : MonoBehaviour
             currentWeaponIndex = weapons.Length - 1;
 
         EquipWeapon(currentWeaponIndex);
+    }
+
+    private void TryFireOnce()
+    {
+        if (Time.time < nextShotTime)
+            return;
+
+        if (currentWeapon.usesCharges)
+        {
+            if (currentCharges <= 0)
+                return;
+
+            currentCharges--;
+        }
+
+        FireBullet();
+        nextShotTime = Time.time + currentWeapon.fireRate;
     }
 
     private void OnDrawGizmos()

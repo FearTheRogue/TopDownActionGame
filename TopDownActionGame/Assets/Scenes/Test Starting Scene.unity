@@ -310,7 +310,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9366819}
-  - component: {fileID: 9366820}
   - component: {fileID: 9366821}
   m_Layer: 5
   m_Name: DashUI
@@ -341,24 +340,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 13}
   m_SizeDelta: {x: 54.222504, y: 52.3649}
   m_Pivot: {x: 0.5, y: 0}
---- !u!114 &9366820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9366818}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70f3aff3c9bfca54a9c4dcbd0cf714c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DashCooldownUI
-  dash: {fileID: 1350970854}
-  iconImage: {fileID: 710163759}
-  cooldownFill: {fileID: 333770444}
-  cooldownText: {fileID: 1742839586}
-  readyColour: {r: 0.051397286, g: 0.7264151, b: 0.23231244, a: 1}
-  cooldownColour: {r: 0.6, g: 0.6, b: 0.6, a: 1}
 --- !u!114 &9366821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,7 +358,7 @@ MonoBehaviour:
   iconImage: {fileID: 710163759}
   cooldownFill: {fileID: 333770444}
   cooldownText: {fileID: 1742839586}
-  readyColour: {r: 1, g: 0, b: 0, a: 1}
+  readyColour: {r: 0.35292807, g: 0.911306, b: 0.9716981, a: 1}
   cooldownColour: {r: 0.6, g: 0.6, b: 0.6, a: 1}
 --- !u!1 &19908497
 GameObject:
@@ -49738,7 +49719,7 @@ MonoBehaviour:
   iconImage: {fileID: 1912070141}
   cooldownFill: {fileID: 707383268}
   cooldownText: {fileID: 0}
-  readyColour: {r: 1, g: 1, b: 1, a: 1}
+  readyColour: {r: 0.46860495, g: 0.9245283, b: 0.3009078, a: 1}
   cooldownColour: {r: 0.6, g: 0.6, b: 0.6, a: 1}
 --- !u!1001 &1489442259
 PrefabInstance:

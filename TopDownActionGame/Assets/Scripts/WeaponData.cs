@@ -16,4 +16,11 @@ public class WeaponData : ScriptableObject
     public int bulletDamage;
     public int burstCount;
     public GameObject bulletPrefab;
+
+    public float spreadAngle = 0;
+
+    [Header("Charges")]
+    public int maxCharges = 6;
+    public float rechargeTime = 1.2f;
+    public bool usesCharges = true;
 }
