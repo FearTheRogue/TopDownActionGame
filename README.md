@@ -1,4 +1,4 @@
-# 🌲 Cursed Forest — 2.5D Atmospheric Action Prototype
+# 🌲 Cursed Forest — 2.5D Relic Survival Prototype
 
 ![Unity](https://img.shields.io/badge/Unity-6.3_LTS-black?logo=unity)
 ![C#](https://img.shields.io/badge/C%23-Game_Development-239120?logo=c-sharp)
@@ -6,75 +6,115 @@
 ![Status](https://img.shields.io/badge/Status-Active_Development-green)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-An in-development Unity project exploring atmospheric 2.5D action survival gameplay set within a mysterious, post-collapse medieval forest.
+A modular 2.5D action survival prototype built in Unity, exploring tension-driven relic combat within a cursed medieval forest.
 
-This repository showcases my growth as a junior software and game developer, focusing on:
+This project focuses on:
 
 - Clean, modular C# architecture  
-- Readable and scalable gameplay systems  
-- Intentional game design rather than isolated prototypes  
+- Ability-driven combat systems  
+- Survival pacing over arcade chaos  
+- Vertical-slice-first development  
 
 > ⚠️ **Work in Progress**  
-> Currently focused on building a playable vertical slice.
+> Currently building and refining the first playable forest encounter slice.
 
 ---
 
-## 🎮 Current Gameplay Features
+## 🎮 Current Gameplay Systems
 
 ### 🧍 Player
 
-- Smooth 2D movement with mouse-aimed rotation  
-- Separated visuals / arm pivot system for 2.5D presentation  
-- ScriptableObject-driven modular weapon system  
-- Pistol / Automatic / Burst weapons  
-- Health + knockback system  
-- Hit-stun and hit feedback  
+- Smooth physics-based 2D movement  
+- Mouse-aimed arm pivot with separated visuals (2.5D presentation)  
+- Dash with invulnerability window  
+- Root Burst defensive ability (knockback + stun + chip damage)  
+- Health system with knockback response  
 - Death and respawn loop  
+- Hit flash + damage feedback  
+- Combat state integration  
 
 ---
 
-### 👁️ Enemies
+### 🔮 Relic Weapon System
 
-Modular architecture:
+ScriptableObject-driven modular weapon architecture.
 
-- `EnemyMovement`
-- `EnemyFacing`
-- Behaviour/state logic
-- `EnemyHealth`
-- Melee attack component
-- Hit-stun + knockback reaction
+#### Ember Rune (Semi-Auto Relic)
 
-Implemented enemy types:
+- Charge-based firing system  
+- In-combat regeneration  
+- Fire rate limiting  
+- Controlled spread  
+- Balanced hit-stun  
+- Designed for deliberate pacing  
 
-- **Hollow Wanderer** — Teaches combat spacing  
-- **Thicket Stalker** — Hidden ambush predator  
+Weapons emphasize:
+
+- Resource management  
+- Positioning over spam  
+- Survival rhythm  
 
 ---
 
-### ⚔️ Combat Systems
+### 👁️ Enemy Architecture
 
-- Damage pipeline using `IDamageable`
-- Knockback + hit-stun mechanics
-- Combat state system
-- Smooth camera transitions between exploration and combat
-- Designed for tension-based pacing
+Component-based modular enemy system:
+
+- `EnemyMovement`  
+- `EnemyFacing`  
+- Behaviour logic modules  
+- `EnemyHealth`  
+- `HitReaction`  
+- Melee attack component  
+- Knockback integration  
+
+#### Implemented Enemies
+
+- **Hollow Wanderer** — Teaches spacing and pressure  
+- **Thicket Stalker** — Ambush predator with rush attack  
+
+Enemies support:
+
+- Custom stun durations  
+- Knockback stacking  
+- Modular behaviour composition  
+
+---
+
+### 🎥 Combat & Camera Systems
+
+- Combat state manager  
+- Smooth camera zoom transitions (explore ↔ combat)  
+- Priority-based Cinemachine setup  
+- Ability-triggered combat engagement  
+
+---
+
+### 🖥 UI Systems
+
+- Player health bar with smoothing  
+- Dash cooldown indicator  
+- Root Burst cooldown indicator  
+- Reusable ability cooldown framework  
+- Modular UI cooldown architecture  
 
 ---
 
 ## 🌲 Design Direction
 
-A short atmospheric 2.5D action survival experience focused on:
+Cursed Forest is evolving into:
 
-- **Isolation**
-- **Unease**
-- **Fragile Survival**
+> A slow, tension-driven relic survival experience.
 
-Current focus: 3–5 minute vertical slice validating:
+Core pillars:
 
-- Combat feel  
-- Enemy pacing  
-- Ambush tension  
-- Environmental mood  
+- **Isolation** — Quiet spaces between danger  
+- **Unease** — Ambush predators and limited resources  
+- **Fragile Survival** — Abilities provide escape, not dominance  
+
+**Core Loop:**
+
+Explore → Tension → Encounter → Survive → Silence  
 
 ---
 
@@ -83,42 +123,51 @@ Current focus: 3–5 minute vertical slice validating:
 - Unity 6.3 LTS  
 - C#  
 - URP 2D Renderer  
-- 2D sprites in 2.5D perspective  
+- Cinemachine  
 - Component-driven modular architecture  
+- ScriptableObjects for weapons and configuration  
 
 ---
 
-## 🚧 In Progress
+## 🚧 In Active Development
 
-- Forest vertical slice blockout  
-- Encounter pacing  
-- Relic weapon progression prototype  
-- UI feedback polish  
+- Forest vertical slice level design  
+- Enemy encounter pacing  
+- Relic charge balancing  
+- Combat feel refinement  
+- Ability feedback polish  
 
 ---
 
 ## 🔮 Planned Systems
 
-- Additional enemy variants  
-- Relic ability system  
-- Encounter direction system  
-- Expanded UI polish  
-- Multi-stage playable slice  
+- Additional relic types  
+- Rune modifiers / upgrades  
+- Enemy archetype expansion  
+- Light AI pathing improvements  
+- Environmental interaction systems  
+- Expanded UI polish & feedback  
 
 ---
 
 ## 🧭 Development Philosophy
 
-> Build something small, playable, and atmospheric — then expand safely.
+> Build the core loop first.  
+> Make it feel good.  
+> Expand only when it earns it.
 
-Vertical-slice-first development keeps scope controlled and progress visible.
+The goal is cohesion over feature quantity.
 
 ---
 
-## 📌 Status
+## 📌 Current Milestone
 
-**Active development**  
-Current milestone: First playable forest slice
+First fully playable forest slice featuring:
+
+- Charge-based relic combat  
+- Dash + Root Burst abilities  
+- Ambush enemy encounters  
+- Combat state camera transitions  
 
 ---
 
@@ -126,7 +175,7 @@ Current milestone: First playable forest slice
 
 Junior software & game developer focused on:
 
-- Clean code  
-- Maintainable systems  
-- Thoughtful gameplay design  
-- Finishing real, playable projects  
+- Clean, maintainable systems  
+- Modular architecture  
+- Iterative design  
+- Building complete playable experiences  
