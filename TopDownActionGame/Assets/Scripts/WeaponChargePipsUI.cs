@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,17 +28,55 @@ public class WeaponChargePipsUI : MonoBehaviour
 
         if (shooting == null)
             shooting = FindFirstObjectByType<PlayerShooting>();
+
+        TryBindShooting();
     }
 
     private void OnEnable()
     {
-        if (shooting != null)
-            shooting.OnChargesChanged += Refresh;
+        TrySubscribe();
 
         Refresh();
     }
 
     private void OnDisable()
+    {
+       Unsubscribe();
+    }
+
+    private void Update()
+    {
+        // If shooting wasn't ready on Awake/OnEnable (scene init order), keep trying.
+        if (shooting == null)
+        {
+            TryBindShooting();
+            TrySubscribe();
+
+            // Don't spam refresh constantly; once bound, Refresh() will run via event anyway.
+            if (shooting != null) 
+                Refresh();
+        }
+    }
+
+    private void TryBindShooting()
+    {
+        if (shooting != null)
+            return;
+
+        shooting = FindFirstObjectByType<PlayerShooting>();
+    }
+
+    private void TrySubscribe()
+    {
+        if (shooting == null)
+            return;
+
+        // Avoid double-subscribe
+        shooting.OnChargesChanged -= Refresh;
+        shooting.OnChargesChanged += Refresh;
+    }
+
+    private void Unsubscribe()
     {
         if (shooting != null)
             shooting.OnChargesChanged -= Refresh;
@@ -49,11 +88,16 @@ public class WeaponChargePipsUI : MonoBehaviour
             return;
 
         // Hide entirely if the current weapon doesn't use charges
-        if (!shooting.UsesCharges)
+        if (!shooting.UsesCharges || shooting.MaxCharges <= 0)
         {
             EnsurePipCount(0); // clears pips
+
+            // Hide softly
+            SetVisible(false);
             return;
         }
+
+        SetVisible(true);
 
         int max = shooting.MaxCharges;
         int current = shooting.CurrentCharges;
@@ -69,6 +113,9 @@ public class WeaponChargePipsUI : MonoBehaviour
 
     private void EnsurePipCount(int count)
     {
+        if (pipPrefab == null || pipParent == null)
+            return;
+
         // Add pips if needed
         while (pips.Count < count)
         {
@@ -85,5 +132,15 @@ public class WeaponChargePipsUI : MonoBehaviour
             if (pip != null)
                 Destroy(pip.gameObject);
         }
+    }
+
+    private void SetVisible(bool visible)
+    {
+        if (canvasGroup == null)
+            return;
+
+        canvasGroup.alpha = visible ? 1 : 0;
+        canvasGroup.interactable = visible;
+        canvasGroup.blocksRaycasts = visible;
     }
 }
