@@ -30,11 +30,14 @@ public class PlayerShooting : MonoBehaviour
 
     private float nextShotTime;
 
+    private bool chargesDirty;
+    private int lastNotifiedCharges = int.MinValue;
+
     public int CurrentCharges => currentCharges;
     public int MaxCharges => currentWeapon != null && currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
     public bool UsesCharges => currentWeapon != null && currentWeapon.usesCharges;
     public event System.Action OnChargesChanged;
-    private void NotifyChargesChanged() => OnChargesChanged?.Invoke();
+    //private void NotifyChargesChanged() => OnChargesChanged?.Invoke();
 
     private void Awake()
     {
@@ -93,6 +96,20 @@ public class PlayerShooting : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void LateUpdate()
+    {
+        if (!chargesDirty)
+            return;
+
+        chargesDirty = false;
+
+        if (currentCharges == lastNotifiedCharges)
+            return;
+
+        lastNotifiedCharges = currentCharges;
+        OnChargesChanged?.Invoke();
     }
 
     private void OnScrollWheel(InputAction.CallbackContext context)
@@ -220,6 +237,11 @@ public class PlayerShooting : MonoBehaviour
 
         FireBullet();
         nextShotTime = Time.time + currentWeapon.fireRate;
+    }
+
+    private void NotifyChargesChanged()
+    {
+        chargesDirty = true;
     }
 
     private void OnDrawGizmos()
