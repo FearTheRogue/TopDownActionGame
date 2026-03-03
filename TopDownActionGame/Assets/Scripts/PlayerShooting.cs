@@ -30,6 +30,12 @@ public class PlayerShooting : MonoBehaviour
 
     private float nextShotTime;
 
+    public int CurrentCharges => currentCharges;
+    public int MaxCharges => currentWeapon != null && currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
+    public bool UsesCharges => currentWeapon != null && currentWeapon.usesCharges;
+    public event System.Action OnChargesChanged;
+    private void NotifyChargesChanged() => OnChargesChanged?.Invoke();
+
     private void Awake()
     {
         playerInputActions = new PlayerInputActions();
@@ -45,6 +51,7 @@ public class PlayerShooting : MonoBehaviour
     private void Start()
     {
         EquipWeapon(0);
+        NotifyChargesChanged();
     }
 
     private void OnDestroy()
@@ -82,6 +89,7 @@ public class PlayerShooting : MonoBehaviour
                 {
                     currentCharges++;
                     rechargeTimer = 0f;
+                    NotifyChargesChanged();
                 }
             }
         }
@@ -174,12 +182,14 @@ public class PlayerShooting : MonoBehaviour
         isShooting = false;
         isBursting = false;
 
-        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : -0;
+        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
+        NotifyChargesChanged();
+
         rechargeTimer = 0f;
 
         nextShotTime = 0f;
 
-        Debug.Log($"Equipped weapon {currentWeapon.weaponName}");
+        //Debug.Log($"Equipped weapon {currentWeapon.weaponName}");
     }
 
     private void CycleWeapon(int direction)
@@ -205,6 +215,7 @@ public class PlayerShooting : MonoBehaviour
                 return;
 
             currentCharges--;
+            NotifyChargesChanged();
         }
 
         FireBullet();
