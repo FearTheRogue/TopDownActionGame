@@ -12,10 +12,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private HitFlash hitFlash;
 
+    [SerializeField] private DeathEffect deathEffect;
+
     private void Awake()
     {
         currentHealth = maxHealth;
         hitFlash = GetComponent<HitFlash>();
+
+        if (deathEffect == null)
+            deathEffect = GetComponent<DeathEffect>();
     }
 
     /// <summary>
@@ -50,6 +55,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void Die()
     {
         OnDeath?.Invoke();
+
+        if (deathEffect != null)
+            deathEffect.Play();
 
         Destroy(gameObject);
     }
