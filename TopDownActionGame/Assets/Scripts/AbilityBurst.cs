@@ -15,6 +15,10 @@ public class AbilityBurst : MonoBehaviour, IAbilityCooldown
     private float cooldownTimer;
     private PlayerInputActions playerInput;
 
+    [Header("FX")]
+    [SerializeField] private GameObject burstFxPrefab;
+    [SerializeField] private Transform fxSpawnPoint;
+
     public bool IsReady => cooldownTimer <= 0f;
     public float CooldownRemaining => Mathf.Max(0f, cooldownTimer);
     public float CooldownDuration => cooldown;
@@ -66,6 +70,13 @@ public class AbilityBurst : MonoBehaviour, IAbilityCooldown
             var enemyHealth = hit.GetComponentInParent<EnemyHealth>();
             if (enemyHealth != null)
                 enemyHealth.TakeDamage(damage);
+        }
+
+        // FX
+        if (burstFxPrefab != null)
+        {
+            Vector3 pos = fxSpawnPoint != null ? fxSpawnPoint.position : transform.position;
+            Instantiate(burstFxPrefab, pos, Quaternion.identity);
         }
 
         cooldownTimer = cooldown;
