@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c995f0fc4bd7bb49a190c72f8f03bd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeathEffect
-  deathFxPrefab: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  deathFxPrefab: {fileID: 1011558351497310444, guid: 58a0a755bb13c9b47a3b0379f8e9bc71, type: 3}
   spawnPoint: {fileID: 5983582752449948814}
   detachFxFromParent: 1
 --- !u!1 &4077646854153379145

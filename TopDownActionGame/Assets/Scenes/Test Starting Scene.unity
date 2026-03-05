@@ -1836,6 +1836,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5235740845109742047, guid: caa371aff5ba4c84b8681057bcc41727, type: 3}
   m_PrefabInstance: {fileID: 1526379658}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &384377539 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1082138347797870614, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+  m_PrefabInstance: {fileID: 1137544366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &384738774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5718,26 +5723,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &751150441 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1879105059675151016, guid: 45b7212df08175e48ae7b0a298a16bc0, type: 3}
-  m_PrefabInstance: {fileID: 8137952996611212288}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &751150442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 751150441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c995f0fc4bd7bb49a190c72f8f03bd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DeathEffect
-  deathFxPrefab: {fileID: 6883250627232965357, guid: 8a9d2efa0c5a6494ab7c60a639e0c4ea, type: 3}
-  spawnPoint: {fileID: 1190917947}
-  detachFxFromParent: 1
 --- !u!1 &753273027
 GameObject:
   m_ObjectHideFlags: 0
@@ -47274,10 +47259,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 416651809906261997, guid: 889c07cf49489f7458a29c208142f086, type: 3}
-      propertyPath: deathFxPrefab
-      value: 
-      objectReference: {fileID: 1011558351497310444, guid: 58a0a755bb13c9b47a3b0379f8e9bc71, type: 3}
     - target: {fileID: 2275237409791555318, guid: 889c07cf49489f7458a29c208142f086, type: 3}
       propertyPath: m_Name
       value: Hollow Patroller
@@ -47322,36 +47303,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4774452364545126066, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+    - target: {fileID: 3062124247298534455, guid: 889c07cf49489f7458a29c208142f086, type: 3}
       propertyPath: 'patrolPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1156361531}
-    - target: {fileID: 4774452364545126066, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+    - target: {fileID: 3062124247298534455, guid: 889c07cf49489f7458a29c208142f086, type: 3}
       propertyPath: 'patrolPoints.Array.data[1]'
       value: 
       objectReference: {fileID: 982566736}
-    - target: {fileID: 4774452364545126066, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+    - target: {fileID: 3062124247298534455, guid: 889c07cf49489f7458a29c208142f086, type: 3}
       propertyPath: 'patrolPoints.Array.data[2]'
       value: 
       objectReference: {fileID: 1245633267}
-    - target: {fileID: 4774452364545126066, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+    - target: {fileID: 3062124247298534455, guid: 889c07cf49489f7458a29c208142f086, type: 3}
       propertyPath: 'patrolPoints.Array.data[3]'
       value: 
       objectReference: {fileID: 306196048}
     m_RemovedComponents:
-    - {fileID: 8660349666009414701, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+    - {fileID: 6219941571513588925, guid: 889c07cf49489f7458a29c208142f086, type: 3}
+    - {fileID: 1196821157192247338, guid: 889c07cf49489f7458a29c208142f086, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2275237409791555318, guid: 889c07cf49489f7458a29c208142f086, type: 3}
-      insertIndex: 8
-      addedObject: {fileID: 1209019364}
-    - targetCorrespondingSourceObject: {fileID: 2275237409791555318, guid: 889c07cf49489f7458a29c208142f086, type: 3}
-      insertIndex: 9
-      addedObject: {fileID: 1209019365}
-    - targetCorrespondingSourceObject: {fileID: 2275237409791555318, guid: 889c07cf49489f7458a29c208142f086, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1209019381}
+      insertIndex: 7
+      addedObject: {fileID: 1209019393}
   m_SourcePrefab: {fileID: 100100000, guid: 889c07cf49489f7458a29c208142f086, type: 3}
 --- !u!1 &1141268679
 GameObject:
@@ -47612,11 +47588,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!4 &1190917947 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4779311084232571340, guid: 45b7212df08175e48ae7b0a298a16bc0, type: 3}
-  m_PrefabInstance: {fileID: 8137952996611212288}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1199668307
 GameObject:
   m_ObjectHideFlags: 0
@@ -47759,7 +47730,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2275237409791555318, guid: 889c07cf49489f7458a29c208142f086, type: 3}
   m_PrefabInstance: {fileID: 1137544366}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1209019364
+--- !u!114 &1209019393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47768,48 +47739,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1209019353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16758555aab33b340b16b165ec7e34ef, type: 3}
+  m_Script: {fileID: 11500000, guid: a3d7b32b5b1e49743a1f45c08a319f1d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HitReaction
-  defaultHitStunTime: 0.08
---- !u!114 &1209019365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209019353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb77ed2aebd67ae4aa86b75b167d1ee3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HitFlash
-  renderers: []
-  flashes: 2
-  flashOnTime: 0.06
-  flashOffTime: 0.08
-  flashColor: {r: 1, g: 0.504717, b: 0.504717, a: 1}
-  flashIntensity: 1
---- !u!114 &1209019381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209019353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d3f74b1297763d438e2f289d00d7abc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyPatrol
-  patrolPoints:
-  - {fileID: 1156361531}
-  - {fileID: 982566736}
-  - {fileID: 1245633267}
-  - {fileID: 306196048}
-  arriveDistance: 0.2
-  waitTime: 1
-  patrolSpeed: 1.5
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMeleeAttack
+  targetName: Player
+  attackRange: 0.86
+  damage: 15
+  cooldown: 1.5
+  windupTime: 0.25
+  recoveryTime: 0.15
+  hitPoint: {fileID: 384377539}
+  hitRadius: 0.5
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1001 &1217391812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54079,10 +54022,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3211311610895517069, guid: a46fba6466bc2a84eb4e3f8b2eeebc65, type: 3}
-      propertyPath: deathFxPrefab
-      value: 
-      objectReference: {fileID: 1011558351497310444, guid: 58a0a755bb13c9b47a3b0379f8e9bc71, type: 3}
     - target: {fileID: 3563076160847521850, guid: a46fba6466bc2a84eb4e3f8b2eeebc65, type: 3}
       propertyPath: m_Name
       value: Wanderer
@@ -54187,10 +54126,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1879105059675151016, guid: 45b7212df08175e48ae7b0a298a16bc0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 751150442}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45b7212df08175e48ae7b0a298a16bc0, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

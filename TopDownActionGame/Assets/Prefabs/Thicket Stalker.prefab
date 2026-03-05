@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 3029430596255957704}
   - component: {fileID: 1655928390532581139}
   - component: {fileID: 6494692923068980425}
+  - component: {fileID: 4499271808594032271}
   m_Layer: 11
   m_Name: Thicket Stalker
   m_TagString: Untagged
@@ -423,6 +424,21 @@ MonoBehaviour:
   lungeSpeed: 15
   lungeDuration: 0.22
   postLungePause: 0.1
+--- !u!114 &4499271808594032271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879105059675151016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c995f0fc4bd7bb49a190c72f8f03bd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathEffect
+  deathFxPrefab: {fileID: 6883250627232965357, guid: 8a9d2efa0c5a6494ab7c60a639e0c4ea, type: 3}
+  spawnPoint: {fileID: 4779311084232571340}
+  detachFxFromParent: 1
 --- !u!1 &3566160008760758188
 GameObject:
   m_ObjectHideFlags: 0
