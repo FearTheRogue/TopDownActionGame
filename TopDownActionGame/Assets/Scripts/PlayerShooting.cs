@@ -126,10 +126,13 @@ public class PlayerShooting : MonoBehaviour
 
     private void OnScrollWheel(InputAction.CallbackContext context)
     {
-        // Adds scroll dampening
-        if (Time.time < lastScrollTime + scrollCooldown) return;
+        if (PauseManager.Paused)
+            return;
 
-        lastScrollTime = Time.time;
+        // Adds scroll dampening
+        if (Time.unscaledTime < lastScrollTime + scrollCooldown) return;
+
+        lastScrollTime = Time.unscaledTime;
 
         // Change weapon
         Vector2 scroll = context.ReadValue<Vector2>();
