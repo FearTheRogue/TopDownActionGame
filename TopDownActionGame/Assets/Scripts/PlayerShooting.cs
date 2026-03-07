@@ -74,6 +74,12 @@ public class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
+        if (PauseManager.Paused)
+        {
+            isShooting = false;
+            return;
+        }
+
         if (currentWeapon == null) return;
 
         if (currentWeapon.weaponType == WeaponType.Automatic && isShooting)
@@ -136,6 +142,9 @@ public class PlayerShooting : MonoBehaviour
 
     public void OnShootPerformed(InputAction.CallbackContext context)
     {
+        if (PauseManager.Paused)
+            return;
+
         if (currentWeapon == null) return;
 
         switch (currentWeapon.weaponType)
@@ -155,6 +164,9 @@ public class PlayerShooting : MonoBehaviour
 
     public void OnShootCanceled(InputAction.CallbackContext context)
     {
+        if (PauseManager.Paused)
+            return;
+
         if (currentWeapon != null && currentWeapon.weaponType == WeaponType.Automatic)
             isShooting = false;
     }
