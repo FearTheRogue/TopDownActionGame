@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class PlayerShooting : MonoBehaviour
     private bool chargesDirty;
     private int lastNotifiedCharges = int.MinValue;
 
+    [SerializeField] private CinemachineImpulseSource impulseSource;
+
     public int CurrentCharges => currentCharges;
     public int MaxCharges => currentWeapon != null && currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
     public bool UsesCharges => currentWeapon != null && currentWeapon.usesCharges;
@@ -55,6 +58,9 @@ public class PlayerShooting : MonoBehaviour
     {
         EquipWeapon(0);
         NotifyChargesChanged();
+
+        if (impulseSource == null)
+            impulseSource = GetComponent<CinemachineImpulseSource>();
     }
 
     private void OnDestroy()
@@ -164,6 +170,8 @@ public class PlayerShooting : MonoBehaviour
         Quaternion rot = firePoint.rotation * Quaternion.Euler(0f, 0f, angleOffset);
 
         GameObject bulletObj = Instantiate(currentWeapon.bulletPrefab, firePoint.position, rot);
+
+        impulseSource?.GenerateImpulse();
 
         Bullet bullet = bulletObj.GetComponent<Bullet>();
 
