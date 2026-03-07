@@ -72,7 +72,7 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = paused ? 0f : 1f;
 
         // Cursor Behaviour
-        Cursor.visible = paused;
-        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+       // Cursor.visible = paused;
+        //Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
     }
 }
