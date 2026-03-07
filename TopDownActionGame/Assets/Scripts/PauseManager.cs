@@ -5,6 +5,8 @@ using UnityEngine.Windows;
 
 public class PauseManager : MonoBehaviour
 {
+    public static bool Paused {  get; private set; }
+
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
 
@@ -62,6 +64,7 @@ public class PauseManager : MonoBehaviour
     private void SetPaused(bool paused)
     {
         IsPaused = paused;
+        Paused = paused;
 
         if (pausePanel != null)
             pausePanel.SetActive(paused);
