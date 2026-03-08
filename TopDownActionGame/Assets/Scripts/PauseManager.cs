@@ -10,6 +10,9 @@ public class PauseManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
 
+    [Header("Scenes")]
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
+
     public bool IsPaused {  get; private set; }
 
     private PlayerInputActions inputActions;
@@ -48,6 +51,13 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+        Paused = false;
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
     public void QuitGame()
