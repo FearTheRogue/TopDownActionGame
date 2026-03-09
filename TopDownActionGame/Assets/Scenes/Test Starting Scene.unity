@@ -49955,7 +49955,6 @@ GameObject:
   - component: {fileID: 1350970850}
   - component: {fileID: 1350970851}
   - component: {fileID: 1350970852}
-  - component: {fileID: 1350970853}
   - component: {fileID: 1350970854}
   - component: {fileID: 1350970855}
   - component: {fileID: 1350970856}
@@ -50144,21 +50143,6 @@ MonoBehaviour:
   flashOffTime: 0.08
   flashColor: {r: 1, g: 0, b: 0, a: 1}
   flashIntensity: 1
---- !u!114 &1350970853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1350970843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6fc000a275e6bc42a15aa3bf8d5d66c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
-  respawnPoint: {fileID: 1788559906}
-  respawnDelay: 2.5
-  combatState: {fileID: 327958649}
 --- !u!114 &1350970854
 MonoBehaviour:
   m_ObjectHideFlags: 0
