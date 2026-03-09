@@ -2,45 +2,48 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class PlayerShooting : MonoBehaviour
 {
     [Header("References")]
-    public Transform firePoint;
+    [SerializeField] private Transform firePoint;
 
     [Header("Weapons")]
-    public WeaponData[] weapons;
-    public WeaponData pistolWeapon;
-    public WeaponData automaticWeapon;
-    public WeaponData burstWeapon;
+    [SerializeField] private WeaponData[] weapons;
 
+    [Header("Weapon Switching")]
+    [SerializeField] private float scrollCooldown = 0.2f;
+
+    [Header("Camera Shake")]
+    [SerializeField] private CinemachineImpulseSource impulseSource;
+    
+    private PlayerInputActions playerInputActions;
     private WeaponData currentWeapon;
     private int currentWeaponIndex = 0;
 
+    // Firing state
     private bool isShooting;
-    private float shotTimer;
     private bool isBursting;
+    private float nextShotTime;
 
-    private PlayerInputActions playerInputActions;
-
-    private float scrollCooldown = 0.2f;
-    private float lastScrollTime;
-
+    // Charges state (for relic-style weapons
     private int currentCharges;
     private float rechargeTimer;
 
-    private float nextShotTime;
-
+    // UI update debouncing (prevents "pip flicker" when regen + firing happen in same frame)
     private bool chargesDirty;
     private int lastNotifiedCharges = int.MinValue;
 
-    [SerializeField] private CinemachineImpulseSource impulseSource;
+    private float lastScrollTime;
 
     public int CurrentCharges => currentCharges;
     public int MaxCharges => currentWeapon != null && currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
     public bool UsesCharges => currentWeapon != null && currentWeapon.usesCharges;
+
     public event System.Action OnChargesChanged;
-    //private void NotifyChargesChanged() => OnChargesChanged?.Invoke();
+
+    private bool Blocked => PauseManager.Paused || GameOverManager.GameOverActive;
 
     private void Awake()
     {
@@ -48,70 +51,62 @@ public class PlayerShooting : MonoBehaviour
 
         playerInputActions.Player.Shoot.performed += OnShootPerformed;
         playerInputActions.Player.Shoot.canceled += OnShootCanceled;
-
         playerInputActions.Player.ScrollWheel.performed += OnScrollWheel;
 
-        playerInputActions.Enable();
+    }
+
+    private void OnEnable()
+    {
+        playerInputActions?.Player.Enable();
+    }
+    private void OnDisable()
+    {
+        // If we pause/disable mid-auto fire, make sure it doesn't resume unexpectedly.
+        isShooting = false;
+
+        playerInputActions?.Player.Disable();
     }
 
     private void Start()
     {
-        EquipWeapon(0);
-        NotifyChargesChanged();
-
         if (impulseSource == null)
             impulseSource = GetComponent<CinemachineImpulseSource>();
+
+        EquipWeapon(0);
+        MarkChargesDirty();
     }
 
     private void OnDestroy()
     {
+        if (playerInputActions == null)
+            return;
+
         playerInputActions.Player.Shoot.performed -= OnShootPerformed;
         playerInputActions.Player.Shoot.canceled -= OnShootCanceled;
-
-        playerInputActions.Disable();
-
+        playerInputActions.Player.ScrollWheel.performed -= OnScrollWheel;
     }
+
 
     private void Update()
     {
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
+        if (Blocked)
         {
             isShooting = false;
             return;
         }
 
-        if (currentWeapon == null) return;
+        if (currentWeapon == null)
+            return;
 
+        // Continuous fire only applies to automatic weapons
         if (currentWeapon.weaponType == WeaponType.Automatic && isShooting)
-        {
-            //shotTimer -= Time.deltaTime;
-
-            //if (shotTimer <= 0f)
-            //{
-            //    FireBullet();
-            //    shotTimer = currentWeapon.fireRate;
-            //}
             TryFireOnce();
-        }
 
-        if (currentWeapon != null && currentWeapon.usesCharges)
-        {
-            if (currentCharges < currentWeapon.maxCharges)
-            {
-                rechargeTimer += Time.deltaTime;
-
-                if (rechargeTimer >= currentWeapon.rechargeTime)
-                {
-                    currentCharges++;
-                    rechargeTimer = 0f;
-                    NotifyChargesChanged();
-                }
-            }
-        }
+        UpdateChargeRegen();
     }
-
     private void LateUpdate()
     {
+        // Fire the UI event once per frame at most to avoid flicker
         if (!chargesDirty)
             return;
 
@@ -124,17 +119,20 @@ public class PlayerShooting : MonoBehaviour
         OnChargesChanged?.Invoke();
     }
 
+    // ----------------------------
+    // Input handlers
+    // ----------------------------
     private void OnScrollWheel(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
+        if (Blocked)
             return;
 
-        // Adds scroll dampening
-        if (Time.unscaledTime < lastScrollTime + scrollCooldown) return;
+        // Use unscalableTime so the cooldown behaves consistently even if timescale changes.
+        if (Time.unscaledTime < lastScrollTime + scrollCooldown)
+            return;
 
         lastScrollTime = Time.unscaledTime;
 
-        // Change weapon
         Vector2 scroll = context.ReadValue<Vector2>();
 
         if (scroll.y > 0)
@@ -142,13 +140,13 @@ public class PlayerShooting : MonoBehaviour
         else if (scroll.y < 0)
             CycleWeapon(-1);
     }
-
     public void OnShootPerformed(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
+        if (Blocked)
             return;
 
-        if (currentWeapon == null) return;
+        if (currentWeapon == null)
+            return;
 
         switch (currentWeapon.weaponType)
         {
@@ -167,112 +165,157 @@ public class PlayerShooting : MonoBehaviour
 
     public void OnShootCanceled(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
+        if (Blocked)
             return;
 
         if (currentWeapon != null && currentWeapon.weaponType == WeaponType.Automatic)
             isShooting = false;
     }
 
-    private void FireBullet()
-    {
-        if (currentWeapon == null || currentWeapon.bulletPrefab == null)
-            return;
-
-        float spread = currentWeapon.spreadAngle;
-        float angleOffset = UnityEngine.Random.Range(-spread, spread);
-
-        Quaternion rot = firePoint.rotation * Quaternion.Euler(0f, 0f, angleOffset);
-
-        GameObject bulletObj = Instantiate(currentWeapon.bulletPrefab, firePoint.position, rot);
-
-        impulseSource?.GenerateImpulse();
-
-        Bullet bullet = bulletObj.GetComponent<Bullet>();
-
-        if (bullet != null)
-        {
-            bullet.SetDamage(currentWeapon.bulletDamage);
-        }
-    }
-
-    private IEnumerator BurstFire()
-    {
-        if (isBursting || currentWeapon == null) yield break;
-
-        isBursting = true;
-
-        for (int i = 0; i < currentWeapon.burstCount; i++)
-        {
-            FireBullet();
-            yield return new WaitForSeconds(currentWeapon.fireRate);
-        }
-
-        isBursting = false;
-    }
+    // ----------------------------
+    // Weapon control
+    // ----------------------------
 
     public void EquipWeapon (int index)
     {
-        if (index < 0 || index >= weapons.Length) return;
+        if (weapons == null || weapons.Length == 0)
+            return;
+        if (index < 0 || index >= weapons.Length)
+            return;
 
         currentWeaponIndex = index;
         currentWeapon = weapons[index];
 
-        shotTimer = 0f;
+        // Reset firing state when swapping
         isShooting = false;
         isBursting = false;
-
-        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
-        NotifyChargesChanged();
-
-        rechargeTimer = 0f;
-
         nextShotTime = 0f;
 
-        //Debug.Log($"Equipped weapon {currentWeapon.weaponName}");
+        // Charges initialise per weapon type
+        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
+        rechargeTimer = 0f;
+        MarkChargesDirty();
     }
 
     private void CycleWeapon(int direction)
     {
+        if (weapons == null || weapons.Length == 0)
+            return; 
+
         currentWeaponIndex += direction;
 
         if (currentWeaponIndex >= weapons.Length)
             currentWeaponIndex = 0;
-        if (currentWeaponIndex < 0)
+        else if (currentWeaponIndex < 0)
             currentWeaponIndex = weapons.Length - 1;
 
         EquipWeapon(currentWeaponIndex);
     }
 
+    // ----------------------------
+    // Firing logic
+    // ----------------------------
+
     private void TryFireOnce()
     {
+        if (currentWeapon == null) 
+            return;
+
+        // Rate limit (prevents click spam)
         if (Time.time < nextShotTime)
             return;
 
+        // Charges gate (relic pacing)
         if (currentWeapon.usesCharges)
         {
             if (currentCharges <= 0)
                 return;
 
             currentCharges--;
-            NotifyChargesChanged();
+            MarkChargesDirty();
         }
 
         FireBullet();
         nextShotTime = Time.time + currentWeapon.fireRate;
     }
 
-    private void NotifyChargesChanged()
+    private void FireBullet()
+    {
+        if (firePoint == null)
+            return;
+
+        if (currentWeapon == null || currentWeapon.bulletPrefab == null)
+            return;
+
+        float spread = currentWeapon.spreadAngle;
+        float angleOffset = Random.Range(-spread, spread);
+
+        Quaternion rot = firePoint.rotation * Quaternion.Euler(0f, 0f, angleOffset);
+
+        GameObject bulletObj = Instantiate(currentWeapon.bulletPrefab, firePoint.position, rot);
+
+        // Camera shake is subtle feedback; safe to skip if impulse isn't configured.
+        impulseSource?.GenerateImpulse();
+
+        if (bulletObj.TryGetComponent<Bullet>(out var bullet))
+            bullet.SetDamage(currentWeapon.bulletDamage);
+    }
+
+    private IEnumerator BurstFire()
+    {
+        if (isBursting || currentWeapon == null) 
+            yield break;
+
+        isBursting = true;
+
+        for (int i = 0; i < currentWeapon.burstCount; i++)
+        {
+            if (Blocked) // prevents firing during pause/game over
+                break;
+            TryFireOnce(); // ensures charges + rate limit are respected
+            yield return new WaitForSeconds(currentWeapon.fireRate);
+        }
+
+        isBursting = false;
+    }
+
+    // ----------------------------
+    // Charges
+    // ----------------------------
+
+    private void UpdateChargeRegen()
+    {
+        if (currentWeapon == null || !currentWeapon.usesCharges)
+            return;
+
+        if (currentCharges >= currentWeapon.maxCharges)
+            return;
+            
+        rechargeTimer += Time.deltaTime;
+
+        if (rechargeTimer >= currentWeapon.rechargeTime)
+        {
+            currentCharges++;
+            rechargeTimer = 0f;
+            MarkChargesDirty();
+        }
+    }
+
+    private void MarkChargesDirty()
     {
         chargesDirty = true;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (firePoint == null) return;
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(firePoint.position, 0.05f);
 
         Gizmos.color = Color.green;
         Gizmos.DrawLine(firePoint.position, firePoint.position + firePoint.right * 0.5f);
     }
+#endif
 }

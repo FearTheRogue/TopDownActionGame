@@ -50081,9 +50081,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 84e8f269f8a566e439072afff01b8c88, type: 2}
   - {fileID: 11400000, guid: b6717fe274d2da94991090f3974b762f, type: 2}
   - {fileID: 11400000, guid: 0cce8d1e7c2ff0f4da630408bfdbd08b, type: 2}
-  pistolWeapon: {fileID: 11400000, guid: 84e8f269f8a566e439072afff01b8c88, type: 2}
-  automaticWeapon: {fileID: 11400000, guid: b6717fe274d2da94991090f3974b762f, type: 2}
-  burstWeapon: {fileID: 11400000, guid: 0cce8d1e7c2ff0f4da630408bfdbd08b, type: 2}
+  scrollCooldown: 0.2
   impulseSource: {fileID: 1240712761}
 --- !u!114 &1350970849
 MonoBehaviour:
