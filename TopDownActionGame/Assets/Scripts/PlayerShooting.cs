@@ -10,7 +10,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private Transform firePoint;
 
     [Header("Weapons")]
-    [SerializeField] private bool startWithNoWeapon = true;
+    [SerializeField] private bool startUnarmed = true;
     [SerializeField] private List<WeaponData> ownedWeapons = new();
 
     [Header("Weapon Switching")]
@@ -45,7 +45,7 @@ public class PlayerShooting : MonoBehaviour
     public event System.Action OnChargesChanged;
 
     private bool Blocked => PauseManager.Paused || GameOverManager.GameOverActive;
-    private bool HasWeaponEquipped => currentWeapon != null;
+    public bool HasAnyWeapons => ownedWeapons != null && ownedWeapons.Count > 0;
 
     private void Awake()
     {
@@ -74,13 +74,11 @@ public class PlayerShooting : MonoBehaviour
         if (impulseSource == null)
             impulseSource = GetComponent<CinemachineImpulseSource>();
 
-        if (startWithNoWeapon)
-        {
+        if (startUnarmed)
             UnequipWeapon();
-        }
-        else
+        else if (HasAnyWeapons)
         {
-            //EquipWeapon(0);
+            EquipWeapon(0);
             MarkChargesDirty();
         }
     }
@@ -137,7 +135,7 @@ public class PlayerShooting : MonoBehaviour
         if (Blocked)
             return;
 
-        // Use unscalableTime so the cooldown behaves consistently even if timescale changes.
+        // Use unscaledTime so the cooldown behaves consistently even if timescale changes.
         if (Time.unscaledTime < lastScrollTime + scrollCooldown)
             return;
 
@@ -145,10 +143,10 @@ public class PlayerShooting : MonoBehaviour
 
         Vector2 scroll = context.ReadValue<Vector2>();
 
-        //if (scroll.y > 0)
-        //    CycleWeapon(+1);
-        //else if (scroll.y < 0)
-        //    CycleWeapon(-1);
+        if (scroll.y > 0)
+            CycleWeapon(+1);
+        else if (scroll.y < 0)
+            CycleWeapon(-1);
     }
     public void OnShootPerformed(InputAction.CallbackContext context)
     {
@@ -191,49 +189,46 @@ public class PlayerShooting : MonoBehaviour
         if (weapon == null)
             return;
 
+        if (ownedWeapons == null)
+            ownedWeapons = new List<WeaponData>();
+
         if (!ownedWeapons.Contains(weapon))
             ownedWeapons.Add(weapon);
 
+        // If the player is unarmed, always equip the first weapon they pick up
+        if (currentWeapon == null)
+            equipNow = true;
+
         if (equipNow)
-            EquipWeaponByReference(weapon);
-    }
+            EquipWeapon(ownedWeapons.IndexOf(weapon));
 
-    public void EquipWeaponByReference(WeaponData weapon)
-    {
-        if (weapon == null)
-            return;
-
-        currentWeapon = weapon;
-
-        isShooting = false;
-        isBursting = false;
-        nextShotTime = 0;
-
-        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
-        rechargeTimer = 0f;
         MarkChargesDirty();
     }
 
-    //public void EquipWeapon (int index)
-    //{
-    //    if (weapons == null || weapons.Length == 0)
-    //        return;
-    //    if (index < 0 || index >= weapons.Length)
-    //        return;
+    public void EquipWeapon(int index)
+    {
+        if (ownedWeapons == null || ownedWeapons.Count == 0)
+        {
+            UnequipWeapon();
+            return;
+        }
 
-    //    currentWeaponIndex = index;
-    //    currentWeapon = weapons[index];
+        index = Mathf.Clamp(index, 0, ownedWeapons.Count - 1);
 
-    //    // Reset firing state when swapping
-    //    isShooting = false;
-    //    isBursting = false;
-    //    nextShotTime = 0f;
+        currentWeaponIndex = index;
+        currentWeapon = ownedWeapons[currentWeaponIndex];
 
-    //    // Charges initialise per weapon type
-    //    currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
-    //    rechargeTimer = 0f;
-    //    MarkChargesDirty();
-    //}
+        // Reset firing state when swapping
+        isShooting = false;
+        isBursting = false;
+        nextShotTime = 0f;
+
+        // Charges initialise per weapon type
+        currentCharges = currentWeapon.usesCharges ? currentWeapon.maxCharges : 0;
+        rechargeTimer = 0f;
+
+        MarkChargesDirty();
+    }
 
     public void UnequipWeapon()
     {
@@ -250,20 +245,20 @@ public class PlayerShooting : MonoBehaviour
         MarkChargesDirty();
     }
 
-    //private void CycleWeapon(int direction)
-    //{
-    //    if (weapons == null || weapons.Length == 0)
-    //        return; 
+    private void CycleWeapon(int direction)
+    {
+        if (ownedWeapons == null || ownedWeapons.Count == 0)
+            return;
 
-    //    currentWeaponIndex += direction;
+        currentWeaponIndex += direction;
 
-    //    if (currentWeaponIndex >= weapons.Length)
-    //        currentWeaponIndex = 0;
-    //    else if (currentWeaponIndex < 0)
-    //        currentWeaponIndex = weapons.Length - 1;
+        if (currentWeaponIndex >= ownedWeapons.Count)
+            currentWeaponIndex = 0;
+        else if (currentWeaponIndex < 0)
+            currentWeaponIndex = ownedWeapons.Count - 1;
 
-    //    EquipWeapon(currentWeaponIndex);
-    //}
+        EquipWeapon(currentWeaponIndex);
+    }
 
     // ----------------------------
     // Firing logic
