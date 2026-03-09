@@ -44,7 +44,7 @@ public class AbilityBurst : MonoBehaviour, IAbilityCooldown
 
     private void OnBurst(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         if (cooldownTimer > 0)

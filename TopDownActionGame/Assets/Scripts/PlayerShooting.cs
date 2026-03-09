@@ -74,7 +74,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
         {
             isShooting = false;
             return;
@@ -126,7 +126,7 @@ public class PlayerShooting : MonoBehaviour
 
     private void OnScrollWheel(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         // Adds scroll dampening
@@ -145,7 +145,7 @@ public class PlayerShooting : MonoBehaviour
 
     public void OnShootPerformed(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         if (currentWeapon == null) return;
@@ -167,7 +167,7 @@ public class PlayerShooting : MonoBehaviour
 
     public void OnShootCanceled(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         if (currentWeapon != null && currentWeapon.weaponType == WeaponType.Automatic)

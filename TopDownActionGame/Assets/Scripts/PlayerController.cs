@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         ////transform.rotation = Quaternion.Euler(0f, 0f, angle);
         //rb.MoveRotation(targetAngle);
 
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
         {
             rb.linearVelocity = Vector2.zero;
             return;
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         if (visuals == null || cam == null)

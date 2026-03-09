@@ -41,7 +41,7 @@ public class PlayerDash : MonoBehaviour, IAbilityCooldown
 
     private void OnDash(InputAction.CallbackContext context)
     {
-        if (PauseManager.Paused)
+        if (PauseManager.Paused || GameOverManager.GameOverActive)
             return;
 
         if (!canDash || !IsReady)
