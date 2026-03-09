@@ -50060,10 +50060,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 8
+  externalVelocityDecay: 12
   visuals: {fileID: 96546777}
   armPivot: {fileID: 1494405235}
   aimSmoothing: 15
-  knockbackDecay: 5
 --- !u!114 &1350970848
 MonoBehaviour:
   m_ObjectHideFlags: 0

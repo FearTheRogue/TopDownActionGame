@@ -1,134 +1,52 @@
-using System;
-using Unity.Cinemachine;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float moveSpeed;
+
+    [Tooltip("How quickly external velocity (knockback/dash) decays back to zero.")]
+    [SerializeField] private float externalVelocityDecay = 12f;
+
+    [Header("Aim")]
     [SerializeField] private Transform visuals;
     [SerializeField] private Transform armPivot;
 
-    [Header("Aim Smoothing")]
+    [Tooltip("Higher = faster aim smoothing. Set to O for instant aim.")]
     [SerializeField] private float aimSmoothing;
 
+    // --- Cached references ---
     private Rigidbody2D rb;
-    //private PlayerInput playerInput;
-    private PlayerInputActions playerInputActions;
     private Camera cam;
+    private SpriteFlipper flipper;
+    private PlayerInputActions playerInputActions;
 
-    private Vector2 inputVector;
+    // --- Input state ---
+    private Vector2 moveInput;
+
+    // --- Aim state ---
+    private Vector2 aimDirection = Vector2.right;
     private float targetAngle;
     private float currentAngle;
 
-    private SpriteFlipper flipper;
-
-    [SerializeField] private float knockbackDecay = 12f;
+    // --- External forces (dash/knockback) ---
+    // These are added on top of player movement and decay over time.
     private Vector2 externalVelocity;
 
-    private Vector2 aimDirection;
+    private bool Blocked => PauseManager.Paused || GameOverManager.GameOverActive;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
         flipper = GetComponent<SpriteFlipper>();
-        //playerInput = GetComponent<PlayerInput>();
 
         playerInputActions = new PlayerInputActions();
-    }
 
-    private void FixedUpdate()
-    {
-        //rb.linearVelocity = new Vector2(inputVector.x, inputVector.y) * moveSpeed;
-        ////transform.rotation = Quaternion.Euler(0f, 0f, angle);
-        //rb.MoveRotation(targetAngle);
-
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
-
-        Vector2 move = inputVector;
-
-        if (move.sqrMagnitude > 1f)
-            move.Normalize();
-
-        // decay external velocity smoothly
-        externalVelocity = Vector2.Lerp(externalVelocity, Vector2.zero, Time.fixedDeltaTime * knockbackDecay);
-
-        rb.linearVelocity = (move * moveSpeed) + externalVelocity; 
-    }
-
-    public void AddKnockback(Vector2 impulse)
-    {
-        externalVelocity += impulse;
-    }
-
-    private void Update()
-    {
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
-            return;
-
-        inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-
-        //if (visuals != null)
-        //    visuals.rotation = Quaternion.Euler(0f, 0f, targetAngle);
-    }
-
-    private void LateUpdate()
-    {
-        if (PauseManager.Paused || GameOverManager.GameOverActive)
-            return;
-
-        if (visuals == null || cam == null)
-            return;
-
-        Vector2 mouseScreen = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
-        Vector3 mouseWorld = cam.ScreenToWorldPoint(mouseScreen);
-        mouseWorld.z = 0f;
-
-        Vector2 direction = (Vector2)mouseWorld - (Vector2)armPivot.position;
-
-        if (direction.sqrMagnitude > 0.0001f)
-        {
-            aimDirection = direction.normalized;
-
-            targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-            if (aimSmoothing > 0f)
-                currentAngle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * aimSmoothing);
-            else
-                currentAngle = targetAngle;
-
-            //visuals.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
-            if (flipper != null)
-                flipper.FaceDirection(direction);
-
-            armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
-        }
-    }
-
-    public void ClearExternalVelocity()
-    {
-        externalVelocity = Vector2.zero;
-    }
-
-    public Vector2 GetMoveInput()
-    {
-        return inputVector;
-    }
-
-    public Vector2 GetAimDirection()
-    {
-        return aimDirection.sqrMagnitude > 0.001f ? aimDirection : transform.right;
-    }
-
-    public void AddDash(Vector2 impulse)
-    {
-        externalVelocity += impulse;
+        if (visuals == null)
+            visuals = transform;
+        if (armPivot == null)
+            armPivot = transform;
     }
 
     private void OnEnable()
@@ -140,4 +58,82 @@ public class PlayerController : MonoBehaviour
     {
         playerInputActions?.Player.Disable();
     }
+    private void Update()
+    {
+        if (Blocked)
+            return;
+
+        // Read raw movement input here; physics uses it in FixedUpdate.
+        moveInput = playerInputActions.Player.Movement.ReadValue<Vector2>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (Blocked)
+        {
+            // Hard-stop while paused/game-over
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        Vector2 move = moveInput;
+
+        if (move.sqrMagnitude > 1f)
+            move.Normalize();
+
+        // External velocity it used for knockback + dash
+        // We decay it separately so it feels responsive but not slippery
+        externalVelocity = Vector2.Lerp(externalVelocity, Vector2.zero, Time.fixedDeltaTime * externalVelocityDecay);
+
+        rb.linearVelocity = (move * moveSpeed) + externalVelocity; 
+    }
+
+    private void LateUpdate()
+    {
+        if (Blocked)
+            return;
+
+        if (armPivot == null || cam == null)
+            return;
+
+        // MOuse input is screen space; convert to world aim in 2D space
+        Vector2 mouseScreen = playerInputActions.Player.MousePosition.ReadValue<Vector2>();
+        Vector3 mouseWorld = cam.ScreenToWorldPoint(mouseScreen);
+        mouseWorld.z = 0f;
+
+        Vector2 direction = (Vector2)mouseWorld - (Vector2)armPivot.position;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        aimDirection = direction.normalized;
+
+        targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        currentAngle = aimSmoothing > 0f ? Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * aimSmoothing) : targetAngle;
+
+        // Flip visuals for left/right facing (keeps sprite readable in 2.5D view)
+        flipper?.FaceDirection(direction);
+
+        // Rotate the arm pivot only
+        armPivot.localRotation = Quaternion.Euler(0f, 0f, currentAngle);
+    }
+
+    // --- External velocity API ---
+    // These impulses work because they are applied through the same movement pipeline,
+    // rather than fighting the rigidbody velocity assignment.
+    public void AddKnockback(Vector2 impulse) => externalVelocity += impulse;
+
+    public void AddDash(Vector2 impulse) => externalVelocity += impulse;
+
+    public void ClearExternalVelocity() => externalVelocity = Vector2.zero;
+
+    // --- Data access for abilities ---
+    public Vector2 GetMoveInput() => moveInput;
+
+    public Vector2 GetAimDirection()
+    {
+        // Always return something sensible even if aim hasn't updated yet
+        return aimDirection.sqrMagnitude > 0.001f ? aimDirection : transform.right;
+    }
+
 }
