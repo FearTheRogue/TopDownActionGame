@@ -50077,7 +50077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooting
   firePoint: {fileID: 1240712760}
-  startWithNoWeapon: 1
+  startUnarmed: 1
   ownedWeapons: []
   scrollCooldown: 0.2
   impulseSource: {fileID: 1240712761}
